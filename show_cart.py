@@ -8,6 +8,9 @@ import json
 import sys
 from pathlib import Path
 
+RED = "\033[31m"
+RESET = "\033[0m"
+
 CURRENCY_SYMBOLS = {
     "cad": "C$",
     "usd": "$",
@@ -86,6 +89,10 @@ def print_table(games: list[dict], currency: str) -> None:
 
     def row(cells: tuple[str, ...]) -> str:
         parts = [f" {cells[i]:<{widths[i]}} " for i in range(5)]
+        # Color ProtonDB tier red if not gold/platinum
+        tier = cells[4]
+        if tier and tier not in ("gold", "platinum"):
+            parts[4] = f" {RED}{tier:<{widths[4]}}{RESET} "
         return "│" + "│".join(parts) + "│"
 
     top = "┌" + "┬".join("─" * (w + 2) for w in widths) + "┐"
