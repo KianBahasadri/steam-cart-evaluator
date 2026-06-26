@@ -55,6 +55,19 @@ def format_proton(tier: str | None, linux_native: bool | None) -> str:
     return tier or ""
 
 
+REVIEW_SHORT = {
+    "Overwhelmingly Positive": "+++",
+    "Very Positive": "++",
+    "Mostly Positive": "+",
+}
+
+
+def format_review(review: str | None) -> str:
+    if not review:
+        return ""
+    return REVIEW_SHORT.get(review, review)
+
+
 def print_table(games: list[dict], currency: str) -> None:
     pkey = price_key_for_game(games[0]) if games else f"price_{currency}"
     sorted_games = sorted(games, key=lambda g: g.get(pkey, 0) or 0)
@@ -72,12 +85,12 @@ def print_table(games: list[dict], currency: str) -> None:
                 discount_str,
                 format_linux(linux),
                 format_proton(game.get("protondb_tier"), linux),
-                game.get("review_score", ""),
+                format_review(game.get("review_score")),
                 discount,
             )
         )
 
-    headers = ("Game", "Price", "Discount", "Linux", "ProtonDB", "Reviews", None)
+    headers = ("Game", "Price", "Discount", "Linux", "ProtonDB", "Rating", None)
     widths = [len(str(h)) if h else 0 for h in headers]
     for name, price, discount, linux, proton, review, _ in rows:
         widths[0] = max(widths[0], len(name))
