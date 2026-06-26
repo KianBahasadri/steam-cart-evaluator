@@ -409,7 +409,12 @@ def generate_pdf(
 
         total_qty = sum(c[1] for c in counts)
         total_price_val = sum(c[2] for c in counts)
-        if total_qty > 0 and pdf.get_y() < 250:
+        if total_qty > 0:
+            # If there's not enough room for the bars block on the current page,
+            # start a new page so the bars always render (not silently dropped).
+            # Need ~40mm: two bar labels + two bars + two legends + spacing.
+            if pdf.get_y() > 240:
+                pdf.add_page()
             bar_w = TOTAL_W * 0.9
             bar_h = 8
             bx = margin_left + (TOTAL_W - bar_w) / 2
@@ -420,8 +425,9 @@ def generate_pdf(
             ]:
                 if total_w == 0:
                     continue
+                # Start a fresh page if we'd overflow mid-block
                 if pdf.get_y() > 262:
-                    break
+                    pdf.add_page()
 
                 pdf.set_font("DejaVu", "B", 8)
                 pdf.set_text_color(*STEAM_MID)
