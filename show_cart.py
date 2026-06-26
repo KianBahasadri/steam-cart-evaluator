@@ -277,6 +277,11 @@ def main() -> int:
         default="games.json",
         help="Input JSON file (default: games.json)",
     )
+    ap.add_argument(
+        "--hide-dropped",
+        action="store_true",
+        help="Exclude games marked as dropped",
+    )
     args = ap.parse_args()
 
     path = Path(args.input)
@@ -285,6 +290,8 @@ def main() -> int:
         return 1
 
     currency, games = load_games(path)
+    if args.hide_dropped:
+        games = [g for g in games if not g.get("dropped")]
     if not games:
         print("No games in file.")
         return 0
