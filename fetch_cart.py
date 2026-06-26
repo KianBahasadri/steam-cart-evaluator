@@ -328,6 +328,7 @@ def main() -> int:
             )
             games.append({
                 "name": item.get("name", "(no id)"),
+                "appid": None,
                 price_key: round(final_price, 2),
                 "discount_percentage": None,
                 "linux_native": None,
@@ -376,6 +377,7 @@ def main() -> int:
 
         games.append({
             "name": name or f"(package {package_id})",
+            "appid": appid,
             price_key: round(final_price, 2),
             "discount_percentage": sub.discount,
             "linux_native": linux_native,

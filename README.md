@@ -73,9 +73,38 @@ Reads `games.json` and displays sorted table with color-coded columns.
 Options:
 - `-i FILE` — read from custom file (default: `games.json`)
 
+### Wishlist Diff
+
+```bash
+./wishlist_diff.py
+```
+
+Shows games that are in your cart but **not** on your wishlist. Extracts your SteamID from Firefox cookies and fetches the wishlist via Steam's public API.
+
+Options:
+- `-i FILE` — read from custom file (default: `games.json`)
+
+### Fun Rating
+
+```bash
+./fun_rating.py
+```
+
+Uses [OpenRouter Fusion](https://openrouter.ai/docs/features/fusion) to rate each cart game for fun factor on a 0.0–1.0 scale. Multiple LLMs analyse in parallel and a judge model synthesises the score.
+
+Requires `OPENROUTER_API_KEY` in `.env`.
+
+Options:
+- `-i FILE` — read from custom file (default: `games.json`)
+- `--game NAME` — rate only games matching name (case-insensitive substring)
+- `--models MODEL...` — analysis panel models (default: GLM 5.2, Gemini 3.5 Flash, Qwen3.7 Max, MiniMax M3)
+- `--judge MODEL` — judge model (default: DeepSeek V4 Pro)
+
 ## Data Sources
 
 - **Cart data**: Steam store (requires Firefox cookies from logged-in session)
 - **Game details**: Steam store API (public, no auth)
 - **ProtonDB tiers**: [ProtonDB API](https://www.protondb.com/) (public)
 - **Review quality**: Steam reviews API (public)
+- **Wishlist**: [IWishlistService API](https://steamapi.palash.dev/reference/steam/wishlist) (public, uses your SteamID)
+- **Fun ratings**: [OpenRouter Fusion](https://openrouter.ai/docs/features/fusion) (requires API key)
