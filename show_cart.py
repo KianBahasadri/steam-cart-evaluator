@@ -177,151 +177,297 @@ def generate_pdf(
     """Generate a PDF report of the cart data."""
     from fpdf import FPDF
 
-    def sanitize(text: str) -> str:
-        """Replace characters not supported by built-in fonts."""
-        replacements = {
-            "\u2122": "(TM)",   # ™
-            "\u00ae": "(R)",    # ®
-            "\u00a9": "(C)",    # ©
-            "\u2013": "-",      # en-dash
-            "\u2014": "--",     # em-dash
-            "\u2018": "'",      # left single quote
-            "\u2019": "'",      # right single quote
-            "\u201c": '"',      # left double quote
-            "\u201d": '"',      # right double quote
-            "\u2026": "...",    # ellipsis
-            "\u00d7": "x",      # multiplication sign
-            "\u2013": "-",      # en dash
-        }
-        for old, new in replacements.items():
-            text = text.replace(old, new)
-        # Remove any remaining non-latin1 characters
-        return text.encode("latin-1", errors="replace").decode("latin-1")
+    # Steam-inspired palette
+    STEAM_DARK   = (27, 40, 56)    # #1b2838
+    STEAM_MID    = (44, 62, 80)    # #2c3e50
+    STEAM_ACCENT = (102, 192, 244) # #66c0f4
+    ROW_EVEN     = (245, 245, 250)
+    ROW_ODD      = (255, 255, 255)
+    TEXT_DARK    = (40, 40, 40)
+    TEXT_LIGHT   = (220, 220, 220)
+    BORDER_LIGHT = (200, 200, 210)
+    RED_RGB      = (220, 53, 69)
+    ORANGE_RGB   = (255, 165, 0)
+    YELLOW_RGB   = (200, 180, 0)
+    GREEN_RGB    = (40, 167, 69)
 
-    class CartPDF(FPDF):
-        def header(self):
-            self.set_font("Helvetica", "B", 16)
-            self.cell(0, 10, "Steam Cart Report", new_x="LMARGIN", new_y="NEXT")
-            self.ln(5)
-
-        def footer(self):
-            self.set_y(-15)
-            self.set_font("Helvetica", "I", 8)
-            self.cell(0, 10, f"Page {self.page_no()}/{{nb}}", align="C")
-
-    pkey = price_key_for_game(games[0]) if games else f"price_{currency}"
-
-    def get_cell_color(col_idx: int, game: dict) -> tuple[int, int, int]:
-        """Return RGB color tuple for a cell based on column and game data."""
+    # Cell color logic for individual columns
+    def get_cell_style(col_idx: int, game: dict) -> tuple[int, int, int] | None:
+        """Return RGB override color or None for default."""
         if col_idx == 5:  # ProtonDB
             tier = game.get("protondb_tier")
             if tier and tier not in ("gold", "platinum"):
-                return (255, 0, 0)  # red
+                return RED_RGB
         elif col_idx == 3:  # Discount
             discount = game.get("discount_percentage")
             if discount is not None:
                 if discount < 60:
-                    return (255, 0, 0)
+                    return RED_RGB
                 elif discount < 80:
-                    return (255, 255, 0)
+                    return ORANGE_RGB
         elif col_idx == 7:  # AI Fun
             fun = game.get("ai_fun_rating")
             if fun is not None:
                 if fun < 0.65:
-                    return (255, 0, 0)
+                    return RED_RGB
                 elif fun < 0.80:
-                    return (255, 255, 0)
+                    return YELLOW_RGB
         elif col_idx == 2:  # Hist. Low
             hist = game.get("price_history")
             if hist == "new_low":
-                return (0, 255, 0)
+                return GREEN_RGB
             elif hist == "matches_low":
-                return (255, 255, 0)
-        return (0, 0, 0)  # black
+                return YELLOW_RGB
+        return None
 
-    def draw_games_table(pdf: CartPDF, game_list: list[dict], title: str | None = None):
-        if title:
-            pdf.set_font("Helvetica", "B", 14)
-            pdf.cell(0, 10, title, new_x="LMARGIN", new_y="NEXT")
-            pdf.ln(3)
+    font_dir = "/usr/share/fonts/TTF"
+    font_regular = f"{font_dir}/DejaVuSans.ttf"
+    font_bold = f"{font_dir}/DejaVuSans-Bold.ttf"
+    font_oblique = f"{font_dir}/DejaVuSans-Oblique.ttf"
 
+    class CartPDF(FPDF):
+        def header(self):
+            # Blue title bar
+            self.set_fill_color(*STEAM_DARK)
+            self.rect(0, 0, self.w, 18, style="F")
+            self.set_y(3)
+            self.set_font("DejaVu", "B", 15)
+            self.set_text_color(*TEXT_LIGHT)
+            self.cell(0, 12, "  Steam Cart Report", new_x="LMARGIN", new_y="NEXT")
+            self.set_text_color(*TEXT_DARK)
+            self.ln(6)
+
+        def footer(self):
+            self.set_y(-12)
+            self.set_font("DejaVu", "I", 7)
+            self.set_text_color(160, 160, 160)
+            self.cell(0, 10, f"— {self.page_no()}/{{nb}} —", align="C")
+            self.set_text_color(*TEXT_DARK)
+
+    pkey = price_key_for_game(games[0]) if games else f"price_{currency}"
+
+    HEADERS = ["Game", "Price", "Hist. Low", "Discount", "Linux", "ProtonDB", "Rating", "AI Fun"]
+    COL_W = [62, 22, 22, 22, 16, 22, 18, 14]  # mm  (total ~198 on 210mm wide page)
+    TOTAL_W = sum(COL_W)
+    ROW_H = 6
+    HEAD_H = 7
+
+    def build_rows(game_list: list[dict]) -> list[dict]:
         sorted_games = sorted(game_list, key=lambda g: g.get(pkey, 0) or 0)
-
-        # Headers
-        headers = ["Game", "Price", "Hist. Low", "Discount", "Linux", "ProtonDB", "Rating", "AI Fun"]
-        col_widths = [65, 22, 22, 22, 15, 22, 18, 14]  # mm
-
-        pdf.set_font("Helvetica", "B", 9)
-        pdf.set_fill_color(200, 200, 200)
-        for i, h in enumerate(headers):
-            pdf.cell(col_widths[i], 7, h, border=1, align="C", fill=True)
-        pdf.ln()
-
-        # Rows
-        pdf.set_font("Helvetica", "", 8)
+        rows = []
         for game in sorted_games:
             price = game.get(pkey, 0) or 0
             discount = game.get("discount_percentage")
             discount_str = f"-{discount}%" if discount is not None else "—"
             linux = game.get("linux_native")
             hist_raw = game.get("price_history")
+            rows.append({
+                "game": game,
+                "cells": [
+                    game.get("name", "(unknown)"),
+                    format_price(price, currency),
+                    format_hist_low(hist_raw),
+                    discount_str,
+                    format_linux(linux),
+                    format_proton(game.get("protondb_tier"), linux),
+                    format_review(game.get("review_score")),
+                    format_fun_rating(game.get("ai_fun_rating")),
+                ],
+            })
+        return rows
 
-            cells = [
-                game.get("name", "(unknown)"),
-                format_price(price, currency),
-                format_hist_low(hist_raw),
-                discount_str,
-                format_linux(linux),
-                format_proton(game.get("protondb_tier"), linux),
-                format_review(game.get("review_score")),
-                format_fun_rating(game.get("ai_fun_rating")),
-            ]
+    def draw_table(pdf: CartPDF, game_list: list[dict], title: str | None = None):
+        if title:
+            pdf.set_font("DejaVu", "B", 13)
+            pdf.set_text_color(*STEAM_MID)
+            pdf.cell(0, 10, title, new_x="LMARGIN", new_y="NEXT")
+            pdf.ln(2)
 
-            for i, cell in enumerate(cells):
-                if pdf.get_y() > 270:
-                    pdf.ln(5)
-                    pdf.set_font("Helvetica", "B", 9)
-                    pdf.set_fill_color(200, 200, 200)
-                    for j, h in enumerate(headers):
-                        pdf.cell(col_widths[j], 7, h, border=1, align="C", fill=True)
-                    pdf.ln()
-                    pdf.set_font("Helvetica", "", 8)
+        rows = build_rows(game_list)
+        margin_left = (pdf.w - TOTAL_W) / 2
 
-                r, g, b = get_cell_color(i, game)
-                pdf.set_text_color(r, g, b)
-                pdf.cell(col_widths[i], 6, sanitize(cell), border=1)
-            pdf.set_text_color(0, 0, 0)
-            pdf.ln()
+        def draw_header_row():
+            pdf.set_fill_color(*STEAM_DARK)
+            pdf.set_text_color(*TEXT_LIGHT)
+            pdf.set_font("DejaVu", "B", 7.5)
+            x = margin_left
+            for i, h in enumerate(HEADERS):
+                pdf.set_xy(x, pdf.get_y())
+                pdf.cell(COL_W[i], HEAD_H, h, align="C", border=0, fill=True)
+                x += COL_W[i]
+            # Underline the header with an accent bar
+            pdf.set_fill_color(*STEAM_ACCENT)
+            pdf.rect(margin_left, pdf.get_y(), TOTAL_W, 0.6, style="F")
+            pdf.ln(HEAD_H + 0.6)
+            pdf.set_text_color(*TEXT_DARK)
 
-        pdf.ln(5)
+        draw_header_row()
+        pdf.set_font("DejaVu", "", 7.5)
 
-        # Summary
+        for idx, row_data in enumerate(rows):
+            # Check if we need a new page
+            if pdf.get_y() > 268:
+                pdf.add_page()
+                pdf.ln(2)
+                draw_header_row()
+                pdf.set_font("DejaVu", "", 7.5)
+
+            bg = ROW_EVEN if idx % 2 == 0 else ROW_ODD
+            pdf.set_fill_color(*bg)
+            y = pdf.get_y()
+
+            # Row background
+            pdf.rect(margin_left, y, TOTAL_W, ROW_H, style="F")
+
+            x = margin_left
+            game = row_data["game"]
+            for col_i, cell in enumerate(row_data["cells"]):
+                pdf.set_xy(x, y)
+                style = get_cell_style(col_i, game)
+                if style:
+                    pdf.set_text_color(*style)
+                else:
+                    pdf.set_text_color(*TEXT_DARK)
+                # Left-align the Game column, center everything else
+                align = "L" if col_i == 0 else "C"
+                padding = 2 if col_i == 0 else 0
+                if col_i == 0:
+                    pdf.set_xy(x + padding, y)
+                    # Truncate game name if too wide
+                    text_w = pdf.get_string_width(cell)
+                    avail = COL_W[col_i] - 2 * padding
+                    if text_w > avail:
+                        while pdf.get_string_width(cell + "…") > avail and len(cell) > 3:
+                            cell = cell[:-1]
+                        cell += "…"
+                    pdf.cell(COL_W[col_i] - 2 * padding, ROW_H, cell, align="L")
+                else:
+                    pdf.cell(COL_W[col_i], ROW_H, cell, align=align)
+                x += COL_W[col_i]
+
+            pdf.set_text_color(*TEXT_DARK)
+            pdf.set_xy(margin_left, y + ROW_H)
+            # Light horizontal line at the bottom of each row
+            pdf.set_draw_color(*BORDER_LIGHT)
+            pdf.line(margin_left, y + ROW_H, margin_left + TOTAL_W, y + ROW_H)
+
+        pdf.ln(4)
+
+        # ── Summary block ──────────────────────────────────────────────────────
+        sorted_games = [r["game"] for r in rows]
         total = sum(g.get(pkey, 0) or 0 for g in sorted_games)
         linux_count = sum(1 for g in sorted_games if g.get("linux_native") is True)
-        proton_count = sum(
-            1 for g in sorted_games
-            if g.get("protondb_tier") in ("platinum", "gold")
-        )
-        summary = (
-            f"{len(sorted_games)} games · "
-            f"total {format_price(total, currency)} · "
-            f"{linux_count} Linux-native · "
+        proton_count = sum(1 for g in sorted_games
+                           if g.get("protondb_tier") in ("platinum", "gold"))
+
+        # Summary box
+        box_h = 14
+        box_y = pdf.get_y()
+        pdf.set_fill_color(*STEAM_DARK)
+        pdf.rect(margin_left, box_y, TOTAL_W, box_h, style="F")
+        # Accent top bar on the box
+        pdf.set_fill_color(*STEAM_ACCENT)
+        pdf.rect(margin_left, box_y, TOTAL_W, 0.8, style="F")
+
+        pdf.set_xy(margin_left, box_y + 2)
+        pdf.set_font("DejaVu", "B", 9)
+        pdf.set_text_color(*TEXT_LIGHT)
+        summary_line = (
+            f"{len(sorted_games)} games   ·   "
+            f"Total {format_price(total, currency)}   ·   "
+            f"{linux_count} Linux-native   ·   "
             f"{proton_count} Proton gold+"
         )
-        pdf.set_font("Helvetica", "B", 10)
-        pdf.cell(0, 8, sanitize(summary), new_x="LMARGIN", new_y="NEXT")
-        pdf.ln(8)
+        pdf.cell(TOTAL_W, 10, summary_line, align="C")
+        pdf.set_text_color(*TEXT_DARK)
+        pdf.set_xy(margin_left, box_y + box_h + 4)
 
+        # ── Price distribution bars ────────────────────────────────────────────
+        # PDF RGB colors for price brackets (matching terminal colors)
+        PDF_BRACKET_COLORS = {
+            GREEN: GREEN_RGB,
+            BLUE: (52, 152, 219),    # Blue
+            YELLOW: YELLOW_RGB,
+            ORANGE: ORANGE_RGB,
+            RED: RED_RGB,
+        }
+        counts = []
+        for label, lo, hi, ansi_color in PRICE_BRACKETS:
+            bracket = [g for g in sorted_games if lo <= (g.get(pkey, 0) or 0) < hi]
+            n = len(bracket)
+            s = sum((g.get(pkey, 0) or 0) for g in bracket)
+            rgb = PDF_BRACKET_COLORS.get(ansi_color, (128, 128, 128))
+            counts.append((label, n, s, rgb))
+
+        total_qty = sum(c[1] for c in counts)
+        total_price_val = sum(c[2] for c in counts)
+        if total_qty > 0 and pdf.get_y() < 250:
+            bar_w = TOTAL_W * 0.9
+            bar_h = 8
+            bx = margin_left + (TOTAL_W - bar_w) / 2
+
+            for bar_title, weights, total_w in [
+                ("by quantity", [c[1] for c in counts], total_qty),
+                ("by price",    [c[2] for c in counts], total_price_val),
+            ]:
+                if total_w == 0:
+                    continue
+                if pdf.get_y() > 262:
+                    break
+
+                pdf.set_font("DejaVu", "B", 8)
+                pdf.set_text_color(*STEAM_MID)
+                pdf.cell(TOTAL_W, 5, bar_title, align="C", new_x="LMARGIN", new_y="NEXT")
+                pdf.ln(1)
+
+                # Stacked bar
+                cx = bx
+                for (_, _, _, rgb), w in zip(counts, weights):
+                    seg_w = (w / total_w) * bar_w if total_w else 0
+                    if seg_w > 0:
+                        pdf.set_fill_color(*rgb)
+                        pdf.rect(cx, pdf.get_y(), seg_w, bar_h, style="F")
+                        cx += seg_w
+                pdf.ln(bar_h + 1)
+
+                # Legend inline
+                pdf.set_font("DejaVu", "", 7)
+                legend_parts = []
+                for label, n, s, rgb in counts:
+                    if n > 0:
+                        if bar_title == "by quantity":
+                            legend_parts.append((f"{label}: {n}/ {total_qty} ({n/total_qty*100:.0f}%)", rgb))
+                        else:
+                            legend_parts.append((f"{label}: {format_price(s, currency)} ({s/total_price_val*100:.1f}%)", rgb))
+
+                lx = margin_left
+                for text, rgb in legend_parts:
+                    pdf.set_fill_color(*rgb)
+                    swatch_w = 4
+                    pdf.rect(lx, pdf.get_y() + 1, swatch_w, 3, style="F")
+                    pdf.set_xy(lx + swatch_w + 1, pdf.get_y())
+                    pdf.set_text_color(*TEXT_DARK)
+                    tw = pdf.get_string_width(text) + 2
+                    pdf.cell(tw, 5, text)
+                    lx += swatch_w + 1 + tw + 4
+                pdf.ln(6)
+
+        pdf.ln(4)
+
+    # ── Build the document ─────────────────────────────────────────────────────
     pdf = CartPDF()
+    pdf.add_font("DejaVu", "", font_regular)
+    pdf.add_font("DejaVu", "B", font_bold)
+    pdf.add_font("DejaVu", "I", font_oblique)
     pdf.alias_nb_pages()
-    pdf.set_auto_page_break(auto=True, margin=15)
+    pdf.set_auto_page_break(auto=True, margin=18)
     pdf.add_page()
 
-    draw_games_table(pdf, games, title=None if dropped_games else None)
+    draw_table(pdf, games, title=None if not dropped_games else "Active games")
 
     if dropped_games:
         pdf.add_page()
-        draw_games_table(pdf, dropped_games, title="Dropped Games")
+        draw_table(pdf, dropped_games, title="Dropped games")
 
     pdf.output(str(output_path))
     print(f"PDF saved to {output_path}")
