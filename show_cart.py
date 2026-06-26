@@ -462,6 +462,136 @@ def generate_pdf(
 
         pdf.ln(4)
 
+    def draw_legend(pdf: CartPDF) -> None:
+        """Draw a legend and methodology section at the bottom of the report."""
+        # Always start on a new page - legend is reference material
+        pdf.add_page()
+
+        # Use the same table-width / margin for alignment
+        margin_left = (pdf.w - TOTAL_W) / 2
+
+        # Section rule + title
+        pdf.set_draw_color(*BORDER_LIGHT)
+        pdf.line(margin_left, pdf.get_y(), margin_left + TOTAL_W, pdf.get_y())
+        pdf.ln(3)
+        pdf.set_font("DejaVu", "B", 11)
+        pdf.set_text_color(*STEAM_MID)
+        pdf.set_x(margin_left)
+        pdf.cell(TOTAL_W, 6, "Legend & Methodology", new_x="LMARGIN", new_y="NEXT")
+        pdf.set_text_color(*TEXT_DARK)
+        pdf.ln(3)
+
+        # ── Color coding swatches ─────────────────────────────────────────────
+        pdf.set_font("DejaVu", "B", 8)
+        pdf.set_x(margin_left)
+        pdf.cell(TOTAL_W, 5, "Color coding", new_x="LMARGIN", new_y="NEXT")
+        pdf.ln(1)
+
+        swatches = [
+            (BG_GREEN,  "Light green",
+             "Current price is a historical new low."),
+            (BG_YELLOW, "Light yellow",
+             "Price matches a previous low, or AI fun rating is mid-range (0.65-0.79)."),
+            (BG_ORANGE, "Light orange",
+             "Moderate discount (60-79% off)."),
+            (BG_RED,    "Light red",
+             "Low discount (<60%), poor ProtonDB tier (below gold), or AI fun < 0.65."),
+        ]
+        swatch_size = 4
+        indent = margin_left + 0.5
+        for rgb, label, desc in swatches:
+            y = pdf.get_y() + 0.5
+            pdf.set_fill_color(*rgb)
+            pdf.rect(indent, y, swatch_size, swatch_size, style="F")
+            pdf.set_draw_color(*BORDER_LIGHT)
+            pdf.rect(indent, y, swatch_size, swatch_size)
+            pdf.set_xy(indent + swatch_size + 1.5, pdf.get_y())
+            pdf.set_font("DejaVu", "B", 7.5)
+            pdf.set_text_color(*TEXT_DARK)
+            pdf.cell(22, 5, label + ":")
+            pdf.set_font("DejaVu", "", 7.5)
+            pdf.cell(0, 5, desc, new_x="LMARGIN", new_y="NEXT")
+            pdf.ln(1)
+
+        pdf.ln(3)
+
+        # ── Review rating shorthand ───────────────────────────────────────────
+        pdf.set_font("DejaVu", "B", 8)
+        pdf.set_x(margin_left)
+        pdf.cell(TOTAL_W, 5, "Review rating shorthand", new_x="LMARGIN", new_y="NEXT")
+        pdf.ln(1)
+        review_table = [
+            ("+++", "Overwhelmingly Positive"),
+            ("++",  "Very Positive"),
+            ("+",   "Mostly Positive"),
+        ]
+        for code, meaning in review_table:
+            pdf.set_x(indent)
+            pdf.set_font("DejaVu", "B", 7.5)
+            pdf.cell(12, 5, code)
+            pdf.set_font("DejaVu", "", 7.5)
+            pdf.cell(0, 5, meaning, new_x="LMARGIN", new_y="NEXT")
+        pdf.ln(3)
+
+        # ── AI fun rating ────────────────────────────────────────────────────
+        pdf.set_font("DejaVu", "B", 8)
+        pdf.set_x(margin_left)
+        pdf.cell(TOTAL_W, 5, "AI Fun rating", new_x="LMARGIN", new_y="NEXT")
+        pdf.ln(1)
+        pdf.set_font("DejaVu", "", 7.5)
+        pdf.set_x(indent)
+        fun_lines = [
+            "0.0-1.0 score from a multi-LLM panel (see Data sources below).",
+            "Colored cells: red if < 0.65, yellow if 0.65-0.79, no highlight if >= 0.80.",
+        ]
+        for line in fun_lines:
+            pdf.set_x(indent)
+            pdf.cell(0, 5, line, new_x="LMARGIN", new_y="NEXT")
+        pdf.ln(3)
+
+        # ── Historical low labels ────────────────────────────────────────────
+        pdf.set_font("DejaVu", "B", 8)
+        pdf.set_x(margin_left)
+        pdf.cell(TOTAL_W, 5, "Historical low labels", new_x="LMARGIN", new_y="NEXT")
+        pdf.ln(1)
+        hist_table = [
+            ("NEW LOW",  "Current price is lower than any previously recorded price."),
+            ("MATCHES",  "Current price equals a previously recorded all-time low."),
+            ("NOT LOW",  "Current price is above the historical lowest price."),
+        ]
+        for label, meaning in hist_table:
+            pdf.set_x(indent)
+            pdf.set_font("DejaVu", "B", 7.5)
+            pdf.cell(22, 5, label)
+            pdf.set_font("DejaVu", "", 7.5)
+            pdf.cell(0, 5, meaning, new_x="LMARGIN", new_y="NEXT")
+        pdf.ln(3)
+
+        # ── Data sources ─────────────────────────────────────────────────────
+        pdf.set_font("DejaVu", "B", 8)
+        pdf.set_x(margin_left)
+        pdf.cell(TOTAL_W, 5, "Data sources", new_x="LMARGIN", new_y="NEXT")
+        pdf.ln(1)
+        pdf.set_font("DejaVu", "", 7.5)
+        source_lines = [
+            "Cart contents: Steam store, authenticated via Firefox session cookies.",
+            "Game details (name, price, discount): public Steam store API.",
+            "Linux support & reviews: public Steam reviews/store APIs.",
+            "ProtonDB compatibility tiers: ProtonDB public API (protondb.com).",
+            "Historical-low classification: parsed from a saved SteamDB wishlist page.",
+            "AI fun ratings: a parallel panel of Gemini, GLM, and Codex subagents",
+            "  scores each game 0-1, and the average is written to the report.",
+        ]
+        for line in source_lines:
+            pdf.set_x(indent)
+            pdf.cell(0, 5, line, new_x="LMARGIN", new_y="NEXT")
+        pdf.ln(2)
+
+        # Closing rule
+        pdf.set_draw_color(*STEAM_ACCENT)
+        pdf.line(margin_left, pdf.get_y(), margin_left + TOTAL_W, pdf.get_y())
+        pdf.set_text_color(*TEXT_DARK)
+
     # ── Build the document ─────────────────────────────────────────────────────
     pdf = CartPDF()
     pdf.add_font("DejaVu", "", font_regular)
@@ -476,6 +606,8 @@ def generate_pdf(
     if dropped_games:
         pdf.add_page()
         draw_table(pdf, dropped_games, title="Dropped games")
+
+    draw_legend(pdf)
 
     pdf.output(str(output_path))
     print(f"PDF saved to {output_path}")
