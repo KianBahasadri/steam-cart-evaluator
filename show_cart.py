@@ -13,6 +13,7 @@ RED = "\033[31m"
 ORANGE = "\033[38;5;208m"
 BLUE = "\033[34m"
 GREEN = "\033[32m"
+BOLD = "\033[1m"
 RESET = "\033[0m"
 
 CURRENCY_SYMBOLS = {
@@ -167,7 +168,39 @@ def print_price_bar(
     print(price_legend)
 
 
-def print_table(games: list[dict], currency: str) -> None:
+def compute_widths(
+    games: list[dict], currency: str, pkey: str
+) -> tuple[list[int], int]:
+    """Compute column widths over a set of games. Returns (widths, visible_cols)."""
+    visible_cols = 8
+    headers = ("Game", "Price", "Hist. Low", "Discount", "Linux", "ProtonDB", "Rating", "AI Fun", None)
+    widths = [len(str(h)) if h else 0 for h in headers]
+    for game in games:
+        price = game.get(pkey, 0) or 0
+        discount = game.get("discount_percentage")
+        discount_str = f"-{discount}%" if discount is not None else "—"
+        linux = game.get("linux_native")
+        hist_raw = game.get("price_history")
+        cells = [
+            game.get("name", "(unknown)"),
+            format_price(price, currency),
+            format_hist_low(hist_raw),
+            discount_str,
+            format_linux(linux),
+            format_proton(game.get("protondb_tier"), linux),
+            format_review(game.get("review_score")),
+            format_fun_rating(game.get("ai_fun_rating")),
+        ]
+        for i, cell in enumerate(cells):
+            widths[i] = max(widths[i], len(cell))
+    widths[8] = 0  # hidden columns
+    return widths, visible_cols
+
+
+def print_table(
+    games: list[dict], currency: str, widths: list[int], visible_cols: int,
+    title: str | None = None,
+) -> None:
     pkey = price_key_for_game(games[0]) if games else f"price_{currency}"
     sorted_games = sorted(games, key=lambda g: g.get(pkey, 0) or 0)
 
@@ -194,19 +227,7 @@ def print_table(games: list[dict], currency: str) -> None:
             )
         )
 
-    visible_cols = 8
     headers = ("Game", "Price", "Hist. Low", "Discount", "Linux", "ProtonDB", "Rating", "AI Fun", None)
-    widths = [len(str(h)) if h else 0 for h in headers]
-    for name, price, hist, discount, linux, proton, review, fun, *_ in rows:
-        widths[0] = max(widths[0], len(name))
-        widths[1] = max(widths[1], len(price))
-        widths[2] = max(widths[2], len(hist))
-        widths[3] = max(widths[3], len(discount))
-        widths[4] = max(widths[4], len(linux))
-        widths[5] = max(widths[5], len(proton))
-        widths[6] = max(widths[6], len(review))
-        widths[7] = max(widths[7], len(fun))
-    widths[8] = 0  # hidden columns (discount raw + fun raw + hist raw)
 
     def line(char: str = "─") -> str:
         parts = [char * (w + 2) for w in widths[:visible_cols]]
@@ -244,6 +265,8 @@ def print_table(games: list[dict], currency: str) -> None:
                 parts[2] = f" {YELLOW}{hist_str:<{widths[2]}}{RESET} "
         return "│" + "│".join(parts) + "│"
 
+    if title:
+        print(f"\n{BOLD}{title}{RESET}\n")
     top = "┌" + "┬".join("─" * (w + 2) for w in widths[:visible_cols]) + "┐"
     print(top)
     print(row(headers))
@@ -282,6 +305,11 @@ def main() -> int:
         action="store_true",
         help="Exclude games marked as dropped",
     )
+    ap.add_argument(
+        "--list-dropped",
+        action="store_true",
+        help="Show a separate table of dropped games below the main table",
+    )
     args = ap.parse_args()
 
     path = Path(args.input)
@@ -289,14 +317,36 @@ def main() -> int:
         print(f"File not found: {path}", file=sys.stderr)
         return 1
 
-    currency, games = load_games(path)
-    if args.hide_dropped:
-        games = [g for g in games if not g.get("dropped")]
-    if not games:
+    currency, all_games = load_games(path)
+    if not all_games:
         print("No games in file.")
         return 0
 
-    print_table(games, currency)
+    dropped = [g for g in all_games if g.get("dropped")]
+    active = [g for g in all_games if not g.get("dropped")]
+
+    if args.hide_dropped:
+        games_to_show = active
+    else:
+        games_to_show = all_games
+
+    if not games_to_show:
+        print("No games to display.")
+        return 0
+
+    pkey = price_key_for_game(games_to_show[0])
+    # Compute widths over all games that will be rendered so columns align
+    all_for_widths = list(games_to_show)
+    if args.list_dropped and dropped and not args.hide_dropped:
+        all_for_widths = list(all_games)
+    widths, visible_cols = compute_widths(all_for_widths, currency, pkey)
+
+    print_table(games_to_show, currency, widths, visible_cols,
+                title="Active games" if (args.list_dropped and dropped and not args.hide_dropped) else None)
+
+    if args.list_dropped and dropped and not args.hide_dropped:
+        print_table(dropped, currency, widths, visible_cols, title="Dropped games")
+
     return 0
 
 
