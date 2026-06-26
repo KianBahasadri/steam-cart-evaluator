@@ -126,7 +126,7 @@
       },
       "ai_fun_rating_at": "2026-06-26T03:07:40.529390+00:00",
       "price_history": "matches_low",
-      "dropped": false
+      "dropped": true
     },
     {
       "name": "XCOM® 2",
@@ -161,7 +161,7 @@
       },
       "ai_fun_rating_at": "2026-06-26T03:08:39.058913+00:00",
       "price_history": "above_low",
-      "dropped": false
+      "dropped": true
     },
     {
       "name": "Kenshi",
@@ -179,7 +179,7 @@
       },
       "ai_fun_rating_at": "2026-06-26T03:07:40.529390+00:00",
       "price_history": "above_low",
-      "dropped": false
+      "dropped": true
     },
     {
       "name": "The Binding of Isaac: Rebirth",
@@ -393,7 +393,7 @@
       },
       "ai_fun_rating_at": "2026-06-26T02:40:00Z",
       "price_history": "above_low",
-      "dropped": false
+      "dropped": true
     },
     {
       "name": "Shadow of the Tomb Raider: Definitive Edition",
@@ -411,7 +411,7 @@
       },
       "ai_fun_rating_at": "2026-06-26T03:07:40.529390+00:00",
       "price_history": "above_low",
-      "dropped": false
+      "dropped": true
     },
     {
       "name": "Save the Reactor",
@@ -482,7 +482,7 @@
       },
       "ai_fun_rating_at": "2026-06-26T03:07:40.529390+00:00",
       "price_history": "above_low",
-      "dropped": false
+      "dropped": true
     },
     {
       "name": "Besiege",

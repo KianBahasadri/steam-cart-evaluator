@@ -391,7 +391,7 @@ def main(stdscr) -> None:
         # Title
         safe_addstr(
             stdscr, y, 0,
-            "Steam Cart (↑↓/jk navigate, enter/space toggle, q quit)",
+            "Steam Cart (↑↓/jk navigate, enter/space toggle, q/Esc quit)",
             curses.A_BOLD, max_x,
         )
         y += 1
@@ -461,7 +461,7 @@ def main(stdscr) -> None:
         # Handle input
         key = stdscr.getch()
 
-        if key == ord("q") or key == ord("Q"):
+        if key == ord("q") or key == ord("Q") or key == 27:  # q, Q, or Esc
             break
         elif key == curses.KEY_UP or key == ord("k"):
             current_row = max(0, current_row - 1)
