@@ -240,6 +240,24 @@ def fetch_protondb_tier(appid: int, debug: bool) -> str | None:
     return data.get("tier")
 
 
+def fetch_app_reviews(appid: int, debug: bool) -> str | None:
+    """Fetch review summary (e.g., 'Very Positive') for an appid."""
+    r = requests.get(
+        f"{STORE_URL}/appreviews/{appid}",
+        params={"json": "1", "num_per_page": "0"},
+        timeout=20,
+    )
+    if not r.ok:
+        if debug:
+            print(f"[debug] appreviews {appid} -> {r.status_code}")
+        return None
+    data = r.json()
+    if not data.get("success"):
+        return None
+    query_summary = data.get("query_summary", {})
+    return query_summary.get("review_score_desc")
+
+
 def fetch_app_details(appid: int, debug: bool) -> dict | None:
     r = requests.get(
         f"{STORE_URL}/api/appdetails/",
@@ -350,17 +368,25 @@ def main() -> int:
             protondb_tier = fetch_protondb_tier(appid, args.debug)
             time.sleep(0.3)
 
+        # Review quality
+        review_score: str | None = None
+        if appid is not None:
+            review_score = fetch_app_reviews(appid, args.debug)
+            time.sleep(0.3)
+
         games.append({
             "name": name or f"(package {package_id})",
             price_key: round(final_price, 2),
             "discount_percentage": sub.discount,
             "linux_native": linux_native,
             "protondb_tier": protondb_tier,
+            "review_score": review_score,
         })
         flag = "linux" if linux_native else f"proton:{protondb_tier or '—'}"
+        review_str = f" [{review_score}]" if review_score else ""
         print(
             f"  [{idx:>2}/{len(line_items)}] {name or '?'}: "
-            f"{formatted or f'{final_price:.2f}'} -{sub.discount}% [{flag}]"
+            f"{formatted or f'{final_price:.2f}'} -{sub.discount}% [{flag}]{review_str}"
         )
         time.sleep(0.5)
 

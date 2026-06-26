@@ -59,7 +59,7 @@ def print_table(games: list[dict], currency: str) -> None:
     pkey = price_key_for_game(games[0]) if games else f"price_{currency}"
     sorted_games = sorted(games, key=lambda g: g.get(pkey, 0) or 0)
 
-    rows: list[tuple[str, str, str, str, str, int | None]] = []
+    rows: list[tuple[str, str, str, str, str, str, int | None]] = []
     for game in sorted_games:
         price = game.get(pkey, 0) or 0
         discount = game.get("discount_percentage")
@@ -72,33 +72,35 @@ def print_table(games: list[dict], currency: str) -> None:
                 discount_str,
                 format_linux(linux),
                 format_proton(game.get("protondb_tier"), linux),
+                game.get("review_score", ""),
                 discount,
             )
         )
 
-    headers = ("Game", "Price", "Discount", "Linux", "ProtonDB", None)
+    headers = ("Game", "Price", "Discount", "Linux", "ProtonDB", "Reviews", None)
     widths = [len(str(h)) if h else 0 for h in headers]
-    for name, price, discount, linux, proton, _ in rows:
+    for name, price, discount, linux, proton, review, _ in rows:
         widths[0] = max(widths[0], len(name))
         widths[1] = max(widths[1], len(price))
         widths[2] = max(widths[2], len(discount))
         widths[3] = max(widths[3], len(linux))
         widths[4] = max(widths[4], len(proton))
-    widths[5] = 0  # hidden column
+        widths[5] = max(widths[5], len(review))
+    widths[6] = 0  # hidden column
 
     def line(char: str = "─") -> str:
-        parts = [char * (w + 2) for w in widths[:5]]
+        parts = [char * (w + 2) for w in widths[:6]]
         return "├" + "┼".join(parts) + "┤" if char == "─" else "└" + "┴".join(parts) + "┘"
 
     def row(cells: tuple) -> str:
-        parts = [f" {cells[i]:<{widths[i]}} " for i in range(5)]
+        parts = [f" {cells[i]:<{widths[i]}} " for i in range(6)]
         # Color ProtonDB tier red if not gold/platinum
         tier = cells[4]
         if tier and tier not in ("gold", "platinum", "ProtonDB"):
             parts[4] = f" {RED}{tier:<{widths[4]}}{RESET} "
         # Color discount yellow if <80%, red if <60%
         discount_str = cells[2]
-        raw_discount = cells[5] if len(cells) > 5 else None
+        raw_discount = cells[6] if len(cells) > 6 else None
         if raw_discount is not None and discount_str != "Discount":
             if raw_discount < 60:
                 parts[2] = f" {RED}{discount_str:<{widths[2]}}{RESET} "
@@ -106,7 +108,7 @@ def print_table(games: list[dict], currency: str) -> None:
                 parts[2] = f" {YELLOW}{discount_str:<{widths[2]}}{RESET} "
         return "│" + "│".join(parts) + "│"
 
-    top = "┌" + "┬".join("─" * (w + 2) for w in widths[:5]) + "┐"
+    top = "┌" + "┬".join("─" * (w + 2) for w in widths[:6]) + "┐"
     print(top)
     print(row(headers))
     print(line())
