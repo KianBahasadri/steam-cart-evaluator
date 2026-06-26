@@ -168,6 +168,165 @@ def print_price_bar(
     print(price_legend)
 
 
+def generate_pdf(
+    games: list[dict],
+    currency: str,
+    output_path: Path,
+    dropped_games: list[dict] | None = None,
+) -> None:
+    """Generate a PDF report of the cart data."""
+    from fpdf import FPDF
+
+    def sanitize(text: str) -> str:
+        """Replace characters not supported by built-in fonts."""
+        replacements = {
+            "\u2122": "(TM)",   # ™
+            "\u00ae": "(R)",    # ®
+            "\u00a9": "(C)",    # ©
+            "\u2013": "-",      # en-dash
+            "\u2014": "--",     # em-dash
+            "\u2018": "'",      # left single quote
+            "\u2019": "'",      # right single quote
+            "\u201c": '"',      # left double quote
+            "\u201d": '"',      # right double quote
+            "\u2026": "...",    # ellipsis
+            "\u00d7": "x",      # multiplication sign
+            "\u2013": "-",      # en dash
+        }
+        for old, new in replacements.items():
+            text = text.replace(old, new)
+        # Remove any remaining non-latin1 characters
+        return text.encode("latin-1", errors="replace").decode("latin-1")
+
+    class CartPDF(FPDF):
+        def header(self):
+            self.set_font("Helvetica", "B", 16)
+            self.cell(0, 10, "Steam Cart Report", new_x="LMARGIN", new_y="NEXT")
+            self.ln(5)
+
+        def footer(self):
+            self.set_y(-15)
+            self.set_font("Helvetica", "I", 8)
+            self.cell(0, 10, f"Page {self.page_no()}/{{nb}}", align="C")
+
+    pkey = price_key_for_game(games[0]) if games else f"price_{currency}"
+
+    def get_cell_color(col_idx: int, game: dict) -> tuple[int, int, int]:
+        """Return RGB color tuple for a cell based on column and game data."""
+        if col_idx == 5:  # ProtonDB
+            tier = game.get("protondb_tier")
+            if tier and tier not in ("gold", "platinum"):
+                return (255, 0, 0)  # red
+        elif col_idx == 3:  # Discount
+            discount = game.get("discount_percentage")
+            if discount is not None:
+                if discount < 60:
+                    return (255, 0, 0)
+                elif discount < 80:
+                    return (255, 255, 0)
+        elif col_idx == 7:  # AI Fun
+            fun = game.get("ai_fun_rating")
+            if fun is not None:
+                if fun < 0.65:
+                    return (255, 0, 0)
+                elif fun < 0.80:
+                    return (255, 255, 0)
+        elif col_idx == 2:  # Hist. Low
+            hist = game.get("price_history")
+            if hist == "new_low":
+                return (0, 255, 0)
+            elif hist == "matches_low":
+                return (255, 255, 0)
+        return (0, 0, 0)  # black
+
+    def draw_games_table(pdf: CartPDF, game_list: list[dict], title: str | None = None):
+        if title:
+            pdf.set_font("Helvetica", "B", 14)
+            pdf.cell(0, 10, title, new_x="LMARGIN", new_y="NEXT")
+            pdf.ln(3)
+
+        sorted_games = sorted(game_list, key=lambda g: g.get(pkey, 0) or 0)
+
+        # Headers
+        headers = ["Game", "Price", "Hist. Low", "Discount", "Linux", "ProtonDB", "Rating", "AI Fun"]
+        col_widths = [65, 22, 22, 22, 15, 22, 18, 14]  # mm
+
+        pdf.set_font("Helvetica", "B", 9)
+        pdf.set_fill_color(200, 200, 200)
+        for i, h in enumerate(headers):
+            pdf.cell(col_widths[i], 7, h, border=1, align="C", fill=True)
+        pdf.ln()
+
+        # Rows
+        pdf.set_font("Helvetica", "", 8)
+        for game in sorted_games:
+            price = game.get(pkey, 0) or 0
+            discount = game.get("discount_percentage")
+            discount_str = f"-{discount}%" if discount is not None else "—"
+            linux = game.get("linux_native")
+            hist_raw = game.get("price_history")
+
+            cells = [
+                game.get("name", "(unknown)"),
+                format_price(price, currency),
+                format_hist_low(hist_raw),
+                discount_str,
+                format_linux(linux),
+                format_proton(game.get("protondb_tier"), linux),
+                format_review(game.get("review_score")),
+                format_fun_rating(game.get("ai_fun_rating")),
+            ]
+
+            for i, cell in enumerate(cells):
+                if pdf.get_y() > 270:
+                    pdf.ln(5)
+                    pdf.set_font("Helvetica", "B", 9)
+                    pdf.set_fill_color(200, 200, 200)
+                    for j, h in enumerate(headers):
+                        pdf.cell(col_widths[j], 7, h, border=1, align="C", fill=True)
+                    pdf.ln()
+                    pdf.set_font("Helvetica", "", 8)
+
+                r, g, b = get_cell_color(i, game)
+                pdf.set_text_color(r, g, b)
+                pdf.cell(col_widths[i], 6, sanitize(cell), border=1)
+            pdf.set_text_color(0, 0, 0)
+            pdf.ln()
+
+        pdf.ln(5)
+
+        # Summary
+        total = sum(g.get(pkey, 0) or 0 for g in sorted_games)
+        linux_count = sum(1 for g in sorted_games if g.get("linux_native") is True)
+        proton_count = sum(
+            1 for g in sorted_games
+            if g.get("protondb_tier") in ("platinum", "gold")
+        )
+        summary = (
+            f"{len(sorted_games)} games · "
+            f"total {format_price(total, currency)} · "
+            f"{linux_count} Linux-native · "
+            f"{proton_count} Proton gold+"
+        )
+        pdf.set_font("Helvetica", "B", 10)
+        pdf.cell(0, 8, sanitize(summary), new_x="LMARGIN", new_y="NEXT")
+        pdf.ln(8)
+
+    pdf = CartPDF()
+    pdf.alias_nb_pages()
+    pdf.set_auto_page_break(auto=True, margin=15)
+    pdf.add_page()
+
+    draw_games_table(pdf, games, title=None if dropped_games else None)
+
+    if dropped_games:
+        pdf.add_page()
+        draw_games_table(pdf, dropped_games, title="Dropped Games")
+
+    pdf.output(str(output_path))
+    print(f"PDF saved to {output_path}")
+
+
 def compute_widths(
     games: list[dict], currency: str, pkey: str
 ) -> tuple[list[int], int]:
@@ -310,6 +469,13 @@ def main() -> int:
         action="store_true",
         help="Show a separate table of dropped games below the main table",
     )
+    ap.add_argument(
+        "--pdf",
+        nargs="?",
+        const="cart.pdf",
+        default=None,
+        help="Generate a PDF report (optional output path, defaults to cart.pdf)",
+    )
     args = ap.parse_args()
 
     path = Path(args.input)
@@ -334,6 +500,14 @@ def main() -> int:
         print("No games to display.")
         return 0
 
+    # PDF output
+    if args.pdf is not None:
+        pdf_path = Path(args.pdf)
+        dropped_for_pdf = dropped if (args.list_dropped and not args.hide_dropped) else None
+        generate_pdf(games_to_show, currency, pdf_path, dropped_games=dropped_for_pdf)
+        return 0
+
+    # Terminal output
     pkey = price_key_for_game(games_to_show[0])
     # Compute widths over all games that will be rendered so columns align
     all_for_widths = list(games_to_show)
