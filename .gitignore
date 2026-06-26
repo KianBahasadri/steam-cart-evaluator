@@ -3,6 +3,7 @@ __pycache__/
 *.pyc
 .venv/
 .qwen/
+*.pdf
 
 # SteamDB wishlist dumps
 Your wishlist*.html
