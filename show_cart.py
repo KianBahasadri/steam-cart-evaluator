@@ -809,34 +809,51 @@ def main() -> int:
     dropped = [g for g in all_games if g.get("dropped")]
     active = [g for g in all_games if not g.get("dropped")]
 
-    if args.hide_dropped:
+    # When --list-dropped is active, dropped games appear only in their own table
+    show_dropped_separately = args.list_dropped and dropped and not args.hide_dropped
+
+    if args.hide_dropped or show_dropped_separately:
         games_to_show = active
     else:
         games_to_show = all_games
 
-    if not games_to_show:
+    if not games_to_show and not show_dropped_separately:
         print("No games to display.")
         return 0
 
     # PDF output
     if args.pdf is not None:
         pdf_path = Path(args.pdf)
-        dropped_for_pdf = dropped if (args.list_dropped and not args.hide_dropped) else None
+        dropped_for_pdf = dropped if show_dropped_separately else None
+        if not games_to_show and show_dropped_separately:
+            # Edge case: every game is dropped; give PDF something for the main page
+            pass
+        if not games_to_show and not show_dropped_separately:
+            return 0
         generate_pdf(games_to_show, currency, pdf_path, dropped_games=dropped_for_pdf)
         return 0
 
     # Terminal output
+    if not games_to_show:
+        # Only a dropped table will be rendered, so use that as the source for widths/pkey
+        pkey = price_key_for_game(dropped[0])
+        widths, visible_cols = compute_widths(dropped, currency, pkey)
+        print_table(dropped, currency, widths, visible_cols, title="Dropped games")
+        return 0
+
     pkey = price_key_for_game(games_to_show[0])
     # Compute widths over all games that will be rendered so columns align
     all_for_widths = list(games_to_show)
-    if args.list_dropped and dropped and not args.hide_dropped:
-        all_for_widths = list(all_games)
+    if show_dropped_separately:
+        all_for_widths.extend(dropped)
     widths, visible_cols = compute_widths(all_for_widths, currency, pkey)
 
-    print_table(games_to_show, currency, widths, visible_cols,
-                title="Active games" if (args.list_dropped and dropped and not args.hide_dropped) else None)
+    print_table(
+        games_to_show, currency, widths, visible_cols,
+        title="Active games" if show_dropped_separately else None,
+    )
 
-    if args.list_dropped and dropped and not args.hide_dropped:
+    if show_dropped_separately:
         print_table(dropped, currency, widths, visible_cols, title="Dropped games")
 
     return 0
