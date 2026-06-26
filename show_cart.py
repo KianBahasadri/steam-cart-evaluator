@@ -91,7 +91,7 @@ def print_table(games: list[dict], currency: str) -> None:
         parts = [f" {cells[i]:<{widths[i]}} " for i in range(5)]
         # Color ProtonDB tier red if not gold/platinum
         tier = cells[4]
-        if tier and tier not in ("gold", "platinum"):
+        if tier and tier not in ("gold", "platinum", "ProtonDB"):
             parts[4] = f" {RED}{tier:<{widths[4]}}{RESET} "
         return "│" + "│".join(parts) + "│"
 
