@@ -223,6 +223,23 @@ def fetch_bundle_info(
     return info, appids
 
 
+PROTONDB_API = "https://www.protondb.com/api/v1/reports/summaries"
+
+
+def fetch_protondb_tier(appid: int, debug: bool) -> str | None:
+    """Fetch the ProtonDB compatibility tier for an appid.
+
+    Returns one of: platinum, gold, silver, bronze, borked, or None.
+    """
+    r = requests.get(f"{PROTONDB_API}/{appid}.json", timeout=10)
+    if not r.ok:
+        if debug:
+            print(f"[debug] protondb {appid} -> {r.status_code}")
+        return None
+    data = r.json()
+    return data.get("tier")
+
+
 def fetch_app_details(appid: int, debug: bool) -> dict | None:
     r = requests.get(
         f"{STORE_URL}/api/appdetails/",
@@ -299,11 +316,14 @@ def main() -> int:
             })
             continue
 
+        appid: int | None = None
+
         if bundle_id is not None:
             sub, appids = fetch_bundle_info(session, int(bundle_id), args.debug)
             name = sub.title
             linux_native = False
             if appids:
+                appid = appids[0]  # representative appid for ProtonDB lookup
                 results = []
                 for aid in appids:
                     details = fetch_app_details(aid, args.debug)
@@ -314,6 +334,7 @@ def main() -> int:
         else:
             sub = fetch_sub_info(session, int(package_id), args.debug)
             name = sub.title
+            appid = sub.appid
             linux_native = False
             if sub.appid:
                 details = fetch_app_details(sub.appid, args.debug)
@@ -323,13 +344,20 @@ def main() -> int:
                         details.get("platforms", {}).get("linux")
                     )
 
+        # ProtonDB tier — only for non-Linux-native games with an appid
+        protondb_tier: str | None = None
+        if not linux_native and appid is not None:
+            protondb_tier = fetch_protondb_tier(appid, args.debug)
+            time.sleep(0.3)
+
         games.append({
             "name": name or f"(package {package_id})",
             price_key: round(final_price, 2),
             "discount_percentage": sub.discount,
             "linux_native": linux_native,
+            "protondb_tier": protondb_tier,
         })
-        flag = "linux" if linux_native else "no-linux"
+        flag = "linux" if linux_native else f"proton:{protondb_tier or '—'}"
         print(
             f"  [{idx:>2}/{len(line_items)}] {name or '?'}: "
             f"{formatted or f'{final_price:.2f}'} -{sub.discount}% [{flag}]"

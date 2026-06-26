@@ -45,38 +45,47 @@ def format_linux(value: bool | None) -> str:
     return "?"
 
 
+def format_proton(tier: str | None, linux_native: bool | None) -> str:
+    if linux_native is True:
+        return "—"
+    return tier or "—"
+
+
 def print_table(games: list[dict], currency: str) -> None:
     pkey = price_key_for_game(games[0]) if games else f"price_{currency}"
     sorted_games = sorted(games, key=lambda g: g.get(pkey, 0) or 0)
 
-    rows: list[tuple[str, str, str, str]] = []
+    rows: list[tuple[str, str, str, str, str]] = []
     for game in sorted_games:
         price = game.get(pkey, 0) or 0
         discount = game.get("discount_percentage")
         discount_str = f"-{discount}%" if discount is not None else "—"
+        linux = game.get("linux_native")
         rows.append(
             (
                 game.get("name", "(unknown)"),
                 format_price(price, currency),
                 discount_str,
-                format_linux(game.get("linux_native")),
+                format_linux(linux),
+                format_proton(game.get("protondb_tier"), linux),
             )
         )
 
-    headers = ("Game", "Price", "Discount", "Linux")
+    headers = ("Game", "Price", "Discount", "Linux", "ProtonDB")
     widths = [len(h) for h in headers]
-    for name, price, discount, linux in rows:
+    for name, price, discount, linux, proton in rows:
         widths[0] = max(widths[0], len(name))
         widths[1] = max(widths[1], len(price))
         widths[2] = max(widths[2], len(discount))
         widths[3] = max(widths[3], len(linux))
+        widths[4] = max(widths[4], len(proton))
 
     def line(char: str = "─") -> str:
         parts = [char * (w + 2) for w in widths]
         return "├" + "┼".join(parts) + "┤" if char == "─" else "└" + "┴".join(parts) + "┘"
 
     def row(cells: tuple[str, ...]) -> str:
-        parts = [f" {cells[i]:<{widths[i]}} " for i in range(4)]
+        parts = [f" {cells[i]:<{widths[i]}} " for i in range(5)]
         return "│" + "│".join(parts) + "│"
 
     top = "┌" + "┬".join("─" * (w + 2) for w in widths) + "┐"
@@ -89,10 +98,15 @@ def print_table(games: list[dict], currency: str) -> None:
 
     total = sum(g.get(pkey, 0) or 0 for g in sorted_games)
     linux_count = sum(1 for g in sorted_games if g.get("linux_native") is True)
+    proton_count = sum(
+        1 for g in sorted_games
+        if g.get("protondb_tier") in ("platinum", "gold")
+    )
     print(
         f"\n{len(sorted_games)} games · "
         f"total {format_price(total, currency)} · "
-        f"{linux_count} Linux-native"
+        f"{linux_count} Linux-native · "
+        f"{proton_count} Proton gold+"
     )
 
 
