@@ -8,6 +8,7 @@ import json
 import sys
 from pathlib import Path
 
+YELLOW = "\033[33m"
 RED = "\033[31m"
 RESET = "\033[0m"
 
@@ -58,7 +59,7 @@ def print_table(games: list[dict], currency: str) -> None:
     pkey = price_key_for_game(games[0]) if games else f"price_{currency}"
     sorted_games = sorted(games, key=lambda g: g.get(pkey, 0) or 0)
 
-    rows: list[tuple[str, str, str, str, str]] = []
+    rows: list[tuple[str, str, str, str, str, int | None]] = []
     for game in sorted_games:
         price = game.get(pkey, 0) or 0
         discount = game.get("discount_percentage")
@@ -71,31 +72,41 @@ def print_table(games: list[dict], currency: str) -> None:
                 discount_str,
                 format_linux(linux),
                 format_proton(game.get("protondb_tier"), linux),
+                discount,
             )
         )
 
-    headers = ("Game", "Price", "Discount", "Linux", "ProtonDB")
-    widths = [len(h) for h in headers]
-    for name, price, discount, linux, proton in rows:
+    headers = ("Game", "Price", "Discount", "Linux", "ProtonDB", None)
+    widths = [len(str(h)) if h else 0 for h in headers]
+    for name, price, discount, linux, proton, _ in rows:
         widths[0] = max(widths[0], len(name))
         widths[1] = max(widths[1], len(price))
         widths[2] = max(widths[2], len(discount))
         widths[3] = max(widths[3], len(linux))
         widths[4] = max(widths[4], len(proton))
+    widths[5] = 0  # hidden column
 
     def line(char: str = "─") -> str:
-        parts = [char * (w + 2) for w in widths]
+        parts = [char * (w + 2) for w in widths[:5]]
         return "├" + "┼".join(parts) + "┤" if char == "─" else "└" + "┴".join(parts) + "┘"
 
-    def row(cells: tuple[str, ...]) -> str:
+    def row(cells: tuple) -> str:
         parts = [f" {cells[i]:<{widths[i]}} " for i in range(5)]
         # Color ProtonDB tier red if not gold/platinum
         tier = cells[4]
         if tier and tier not in ("gold", "platinum", "ProtonDB"):
             parts[4] = f" {RED}{tier:<{widths[4]}}{RESET} "
+        # Color discount yellow if <80%, red if <60%
+        discount_str = cells[2]
+        raw_discount = cells[5] if len(cells) > 5 else None
+        if raw_discount is not None and discount_str != "Discount":
+            if raw_discount < 60:
+                parts[2] = f" {RED}{discount_str:<{widths[2]}}{RESET} "
+            elif raw_discount < 80:
+                parts[2] = f" {YELLOW}{discount_str:<{widths[2]}}{RESET} "
         return "│" + "│".join(parts) + "│"
 
-    top = "┌" + "┬".join("─" * (w + 2) for w in widths) + "┐"
+    top = "┌" + "┬".join("─" * (w + 2) for w in widths[:5]) + "┐"
     print(top)
     print(row(headers))
     print(line())
