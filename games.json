@@ -1,6 +1,6 @@
 {
   "currency": "cad",
-  "count": 45,
+  "count": 46,
   "games": [
     {
       "name": "The Witcher 3: Wild Hunt",
@@ -115,7 +115,7 @@
       "ai_fun_rating_at": "2026-06-26T03:07:40.529390+00:00"
     },
     {
-      "name": "XCOM\u00ae 2",
+      "name": "XCOM® 2",
       "appid": 268500,
       "price_cad": 4.49,
       "discount_percentage": 85,
@@ -304,7 +304,7 @@
       "ai_fun_rating_at": "2026-06-26T03:07:40.529390+00:00"
     },
     {
-      "name": "Battlefield\u2122 1",
+      "name": "Battlefield™ 1",
       "appid": 1238840,
       "price_cad": 2.74,
       "discount_percentage": 95,
@@ -575,7 +575,7 @@
       "ai_fun_rating_at": "2026-06-26T03:25:32.185494+00:00"
     },
     {
-      "name": "Tom Clancy's Splinter Cell Chaos Theory\u00ae",
+      "name": "Tom Clancy's Splinter Cell Chaos Theory®",
       "appid": 13570,
       "price_cad": 2.49,
       "discount_percentage": 75,
@@ -591,7 +591,7 @@
       "ai_fun_rating_at": "2026-06-26T03:28:41.039208+00:00"
     },
     {
-      "name": "Far Cry\u00ae 4",
+      "name": "Far Cry® 4",
       "appid": 298110,
       "price_cad": 3.99,
       "discount_percentage": 90,
@@ -638,7 +638,7 @@
       "ai_fun_rating_at": "2026-06-26T03:25:32.185494+00:00"
     },
     {
-      "name": "Mass Effect\u2122 Legendary Edition",
+      "name": "Mass Effect™ Legendary Edition",
       "appid": 1328670,
       "price_cad": 6.39,
       "discount_percentage": 92,
@@ -653,7 +653,7 @@
       "ai_fun_rating_at": "2026-06-26T03:25:32.185494+00:00"
     },
     {
-      "name": "Dragon Age\u2122 Inquisition",
+      "name": "Dragon Age™ Inquisition",
       "appid": 1222690,
       "price_cad": 5.49,
       "discount_percentage": 90,
@@ -684,7 +684,7 @@
       "ai_fun_rating_at": "2026-06-26T03:25:32.185494+00:00"
     },
     {
-      "name": "Injustice\u2122 2",
+      "name": "Injustice™ 2",
       "appid": 627270,
       "price_cad": 6.99,
       "discount_percentage": 90,
@@ -714,6 +714,22 @@
         "codex": 0.86
       },
       "ai_fun_rating_at": "2026-06-26T03:25:32.185494+00:00"
+    },
+    {
+      "name": "Bendy and the Dark Revival",
+      "appid": 1063660,
+      "price_cad": 1.99,
+      "discount_percentage": 90,
+      "linux_native": false,
+      "protondb_tier": "platinum",
+      "review_score": "Very Positive",
+      "ai_fun_rating": 0.65,
+      "ai_fun_rating_panel": {
+        "gemini": 0.62,
+        "glm": 0.65,
+        "codex": 0.78
+      },
+      "ai_fun_rating_at": "2026-06-26T04:22:23.027815+00:00"
     }
   ]
 }

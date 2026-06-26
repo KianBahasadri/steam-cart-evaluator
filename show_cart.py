@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/env -S uv run
 """Display games.json as a sorted terminal table."""
 
 from __future__ import annotations

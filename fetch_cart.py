@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/env -S uv run
 """Read the current Steam shopping cart and dump it to games.json.
 
 Uses Firefox cookies to authenticate the cart page fetch (the Steam Web API
@@ -280,8 +280,26 @@ def fetch_app_details(appid: int, debug: bool) -> dict | None:
 def main() -> int:
     ap = argparse.ArgumentParser(description="Dump your Steam cart to games.json")
     ap.add_argument("-o", "--output", default="games.json")
+    ap.add_argument(
+        "--refresh",
+        action="store_true",
+        help="Re-fetch details for all games (default: skip games already in file, only add new ones)",
+    )
     ap.add_argument("--debug", action="store_true", help="Print raw responses")
     args = ap.parse_args()
+
+    # Load existing data so we can skip already-known games (unless --refresh)
+    out_path = Path(args.output)
+    existing_by_appid: dict[int, dict] = {}
+    if not args.refresh and out_path.exists():
+        try:
+            old_data = json.loads(out_path.read_text())
+            for og in old_data.get("games", []):
+                aid = og.get("appid")
+                if aid is not None:
+                    existing_by_appid[aid] = og
+        except (json.JSONDecodeError, KeyError):
+            pass
 
     print("Reading Steam cookies from Firefox...")
     cookies = load_firefox_cookies(STORE_HOST)
@@ -339,8 +357,27 @@ def main() -> int:
 
         if bundle_id is not None:
             sub, appids = fetch_bundle_info(session, int(bundle_id), args.debug)
-            name = sub.title
-            linux_native = False
+            appid = appids[0] if appids else sub.appid
+        else:
+            sub = fetch_sub_info(session, int(package_id), args.debug)
+            appids = []
+            appid = sub.appid
+
+        # Default mode: skip re-fetching games already in the file
+        if not args.refresh and appid is not None and appid in existing_by_appid:
+            old = existing_by_appid[appid]
+            old[price_key] = round(final_price, 2)
+            games.append(old)
+            print(
+                f"  [{idx:>2}/{len(line_items)}] {old.get('name', '?')} "
+                f"(already known, skipped)"
+            )
+            continue
+
+        name = sub.title
+        linux_native = False
+
+        if bundle_id is not None:
             if appids:
                 appid = appids[0]  # representative appid for ProtonDB lookup
                 results = []
@@ -351,10 +388,6 @@ def main() -> int:
                     time.sleep(0.3)
                 linux_native = bool(results) and all(results)
         else:
-            sub = fetch_sub_info(session, int(package_id), args.debug)
-            name = sub.title
-            appid = sub.appid
-            linux_native = False
             if sub.appid:
                 details = fetch_app_details(sub.appid, args.debug)
                 if details:
@@ -392,8 +425,27 @@ def main() -> int:
         )
         time.sleep(0.5)
 
+    # Merge: preserve extra fields (ai_fun_rating, etc.) from existing file
+    out_path = Path(args.output)
+    if out_path.exists():
+        try:
+            old_data = json.loads(out_path.read_text())
+            old_by_appid: dict[int, dict] = {}
+            for og in old_data.get("games", []):
+                aid = og.get("appid")
+                if aid is not None:
+                    old_by_appid[aid] = og
+            for g in games:
+                aid = g.get("appid")
+                if aid is not None and aid in old_by_appid:
+                    for k, v in old_by_appid[aid].items():
+                        if k not in g:
+                            g[k] = v
+        except (json.JSONDecodeError, KeyError):
+            pass
+
     out = {"currency": currency, "count": len(games), "games": games}
-    Path(args.output).write_text(
+    out_path.write_text(
         json.dumps(out, indent=2, ensure_ascii=False)
     )
     print(f"\nWrote {len(games)} game(s) to {args.output}")
