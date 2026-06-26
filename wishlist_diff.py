@@ -16,6 +16,8 @@ from pathlib import Path
 
 import requests
 
+import re
+
 from fetch_cart import (
     STORE_HOST,
     STORE_URL,
@@ -27,6 +29,18 @@ WISHLIST_API = (
     "https://api.steampowered.com/IWishlistService/GetWishlist/v1"
 )
 ADD_WISHLIST_URL = f"{STORE_URL}/api/addtowishlist/"
+
+
+def extract_sessionid(html_text: str) -> str | None:
+    for pattern in (
+        r'sessionid["\s:=]+(["\']?)([a-zA-Z0-9]{24,})\1',
+        r'g_sessionID\s*=\s*["\']([^"\']+)["\']',
+        r'<input[^>]+name=["\']sessionid["\'][^>]+value=["\']([^"\']+)["\']',
+    ):
+        m = re.search(pattern, html_text)
+        if m:
+            return m.group(m.lastindex)
+    return None
 
 
 def steamid_from_cookies(cookies: dict[str, str]) -> int | None:
@@ -138,6 +152,32 @@ def main() -> int:
             f"  ({len(no_appid)} game(s) could not be compared — "
             "no appid; re-run fetch_cart.py)"
         )
+
+    if args.add and not_wishlisted:
+        print("\nFetching cart page to extract session ID...")
+        session = build_session(cookies)
+        cart_resp = session.get(f"{STORE_URL}/cart/", timeout=20)
+        cart_resp.raise_for_status()
+
+        sessionid = extract_sessionid(cart_resp.text)
+        if not sessionid:
+            print(
+                "\nCannot add to wishlist: could not extract sessionid from cart page",
+                file=sys.stderr,
+            )
+            return 1
+
+        print(f"Adding {len(not_wishlisted)} game(s) to wishlist...")
+        added = 0
+        for game in not_wishlisted:
+            appid = int(game.get("appid", 0))
+            name = game.get("name", "?")
+            if add_to_wishlist(session, appid, sessionid):
+                print(f"  ✓ added {name}")
+                added += 1
+            else:
+                print(f"  ✗ failed to add {name}", file=sys.stderr)
+        print(f"\nAdded {added}/{len(not_wishlisted)} game(s) to wishlist")
 
     return 0
 
