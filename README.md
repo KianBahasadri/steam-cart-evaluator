@@ -86,19 +86,9 @@ Options:
 
 ### Fun Rating
 
-```bash
-./fun_rating.py
-```
-
-Uses [OpenRouter Fusion](https://openrouter.ai/docs/features/fusion) to rate each cart game for fun factor on a 0.0–1.0 scale. Multiple LLMs analyse in parallel and a judge model synthesises the score.
-
-Requires `OPENROUTER_API_KEY` in `.env`.
-
-Options:
-- `-i FILE` — read from custom file (default: `games.json`)
-- `--game NAME` — rate only games matching name (case-insensitive substring)
-- `--models MODEL...` — analysis panel models (default: GLM 5.2, Gemini 3.5 Flash, Qwen3.7 Max, MiniMax M3)
-- `--judge MODEL` — judge model (default: DeepSeek V4 Pro)
+Follow `fun_rating_workflow.md` to rate each cart game for fun factor on a 0.0–1.0
+scale. An orchestrator spawns per-game subagents that consult Gemini, GLM, and Codex
+in parallel, consolidate their scores, and write `ai_fun_rating` to `games.json`.
 
 ## Data Sources
 
@@ -107,4 +97,4 @@ Options:
 - **ProtonDB tiers**: [ProtonDB API](https://www.protondb.com/) (public)
 - **Review quality**: Steam reviews API (public)
 - **Wishlist**: [IWishlistService API](https://steamapi.palash.dev/reference/steam/wishlist) (public, uses your SteamID)
-- **Fun ratings**: [OpenRouter Fusion](https://openrouter.ai/docs/features/fusion) (requires API key)
+- **Fun ratings**: Gemini, GLM (Pioneer), and Codex agent panel (see `fun_rating_workflow.md`)
