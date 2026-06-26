@@ -642,7 +642,8 @@ def generate_pdf(
     draw_table(pdf, games, title=None if not dropped_games else "Active games")
 
     if dropped_games:
-        pdf.add_page()
+        # Continue below the active games' bars instead of starting a fresh page
+        pdf.ln(6)
         draw_table(pdf, dropped_games, title="Dropped games")
 
     draw_legend(pdf)
