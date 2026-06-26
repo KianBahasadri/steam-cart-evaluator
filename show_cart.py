@@ -173,6 +173,7 @@ def generate_pdf(
     currency: str,
     output_path: Path,
     dropped_games: list[dict] | None = None,
+    removed_games: list[dict] | None = None,
 ) -> None:
     """Generate a PDF report of the cart data."""
     from fpdf import FPDF
@@ -639,12 +640,17 @@ def generate_pdf(
     pdf.set_auto_page_break(auto=True, margin=18)
     pdf.add_page()
 
-    draw_table(pdf, games, title=None if not dropped_games else "Active games")
+    has_subtables = bool(dropped_games) or bool(removed_games)
+    draw_table(pdf, games, title=None if not has_subtables else "Active games")
 
     if dropped_games:
         # Continue below the active games' bars instead of starting a fresh page
         pdf.ln(6)
         draw_table(pdf, dropped_games, title="Dropped games")
+
+    if removed_games:
+        pdf.ln(6)
+        draw_table(pdf, removed_games, title="Removed games (no longer in cart)")
 
     draw_legend(pdf)
 
@@ -795,6 +801,11 @@ def main() -> int:
         help="Show a separate table of dropped games below the main table",
     )
     ap.add_argument(
+        "--list-removed",
+        action="store_true",
+        help="Show a separate table of removed games (no longer in cart) below the main table",
+    )
+    ap.add_argument(
         "--pdf",
         nargs="?",
         const="cart.pdf",
@@ -813,18 +824,21 @@ def main() -> int:
         print("No games in file.")
         return 0
 
-    dropped = [g for g in all_games if g.get("dropped")]
-    active = [g for g in all_games if not g.get("dropped")]
+    removed_games = [g for g in all_games if g.get("removed")]
+    kept = [g for g in all_games if not g.get("removed")]
+    dropped = [g for g in kept if g.get("dropped")]
+    active = [g for g in kept if not g.get("dropped")]
 
-    # When --list-dropped is active, dropped games appear only in their own table
+    # When --list-dropped / --list-removed is active, those games appear in their own tables
     show_dropped_separately = args.list_dropped and dropped and not args.hide_dropped
+    show_removed_separately = args.list_removed and removed_games
 
-    if args.hide_dropped or show_dropped_separately:
-        games_to_show = active
-    else:
-        games_to_show = all_games
+    # Removed games are always excluded from the main list
+    games_to_show = active
+    if not args.hide_dropped and not show_dropped_separately:
+        games_to_show = kept
 
-    if not games_to_show and not show_dropped_separately:
+    if not games_to_show and not show_dropped_separately and not show_removed_separately:
         print("No games to display.")
         return 0
 
@@ -832,20 +846,33 @@ def main() -> int:
     if args.pdf is not None:
         pdf_path = Path(args.pdf)
         dropped_for_pdf = dropped if show_dropped_separately else None
+        removed_for_pdf = removed_games if show_removed_separately else None
         if not games_to_show and show_dropped_separately:
             # Edge case: every game is dropped; give PDF something for the main page
             pass
-        if not games_to_show and not show_dropped_separately:
+        if not games_to_show and not show_dropped_separately and not show_removed_separately:
             return 0
-        generate_pdf(games_to_show, currency, pdf_path, dropped_games=dropped_for_pdf)
+        generate_pdf(
+            games_to_show, currency, pdf_path,
+            dropped_games=dropped_for_pdf,
+            removed_games=removed_for_pdf,
+        )
         return 0
 
     # Terminal output
     if not games_to_show:
-        # Only a dropped table will be rendered, so use that as the source for widths/pkey
-        pkey = price_key_for_game(dropped[0])
-        widths, visible_cols = compute_widths(dropped, currency, pkey)
-        print_table(dropped, currency, widths, visible_cols, title="Dropped games")
+        # Only a dropped or removed table will be rendered
+        if show_dropped_separately:
+            pkey = price_key_for_game(dropped[0])
+            widths, visible_cols = compute_widths(dropped, currency, pkey)
+            print_table(dropped, currency, widths, visible_cols, title="Dropped games")
+        if show_removed_separately:
+            pkey = price_key_for_game(removed_games[0])
+            widths, visible_cols = compute_widths(removed_games, currency, pkey)
+            print_table(
+                removed_games, currency, widths, visible_cols,
+                title="Removed games (no longer in cart)",
+            )
         return 0
 
     pkey = price_key_for_game(games_to_show[0])
@@ -853,15 +880,23 @@ def main() -> int:
     all_for_widths = list(games_to_show)
     if show_dropped_separately:
         all_for_widths.extend(dropped)
+    if show_removed_separately:
+        all_for_widths.extend(removed_games)
     widths, visible_cols = compute_widths(all_for_widths, currency, pkey)
 
     print_table(
         games_to_show, currency, widths, visible_cols,
-        title="Active games" if show_dropped_separately else None,
+        title="Active games" if (show_dropped_separately or show_removed_separately) else None,
     )
 
     if show_dropped_separately:
         print_table(dropped, currency, widths, visible_cols, title="Dropped games")
+
+    if show_removed_separately:
+        print_table(
+            removed_games, currency, widths, visible_cols,
+            title="Removed games (no longer in cart)",
+        )
 
     return 0
 

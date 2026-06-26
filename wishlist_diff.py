@@ -105,7 +105,7 @@ def main() -> int:
         return 1
 
     data = json.loads(path.read_text())
-    cart_games = data.get("games", [])
+    cart_games = [g for g in data.get("games", []) if not g.get("removed")]
     if not cart_games:
         print("No games in cart file.")
         return 0

@@ -360,7 +360,10 @@ def main(stdscr) -> None:
         stdscr.getch()
         return
 
-    currency, games, data = load_games(path)
+    currency, all_games, data = load_games(path)
+    # Exclude games no longer in the cart from the interactive view
+    games = [g for g in all_games if not g.get("removed")]
+    removed = [g for g in all_games if g.get("removed")]
     if not games:
         stdscr.addstr(0, 0, "No games in file.")
         stdscr.refresh()
@@ -378,7 +381,8 @@ def main(stdscr) -> None:
     def save_selection() -> None:
         for g, sel in zip(sorted_games, selected):
             g["dropped"] = not sel
-        data["games"] = games
+        # Preserve removed games so they aren't lost on save
+        data["games"] = all_games
         path.write_text(json.dumps(data, indent=2, ensure_ascii=False))
 
     while True:

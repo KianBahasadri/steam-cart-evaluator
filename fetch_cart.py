@@ -319,9 +319,21 @@ def main() -> int:
     line_items = cart_data.get("cart", {}).get("line_items", []) or []
     if not line_items:
         print("Your cart is empty.")
-        Path(args.output).write_text(
-            json.dumps({"currency": None, "count": 0, "games": []}, indent=2)
+        # Mark all existing games as removed instead of wiping them
+        empty_games: list[dict] = []
+        if out_path.exists():
+            try:
+                old = json.loads(out_path.read_text())
+                for og in old.get("games", []):
+                    og["removed"] = True
+                    empty_games.append(og)
+            except (json.JSONDecodeError, KeyError):
+                pass
+        out_path.write_text(
+            json.dumps({"currency": None, "count": 0, "games": empty_games}, indent=2)
         )
+        if empty_games:
+            print(f"  marked {len(empty_games)} previously-tracked game(s) as removed")
         return 0
 
     first_price = line_items[0].get("price_when_added", {}) or {}
@@ -425,7 +437,8 @@ def main() -> int:
         )
         time.sleep(0.5)
 
-    # Merge: preserve extra fields (ai_fun_rating, etc.) from existing file
+    # Merge: preserve extra fields, track removed games
+    removed: list[dict] = []
     out_path = Path(args.output)
     if out_path.exists():
         try:
@@ -435,20 +448,37 @@ def main() -> int:
                 aid = og.get("appid")
                 if aid is not None:
                     old_by_appid[aid] = og
+            # Preserve extra fields on current games
+            cart_appids: set[int] = set()
             for g in games:
                 aid = g.get("appid")
+                if aid is not None:
+                    cart_appids.add(aid)
+                    # Clear removed flag if game is back in the cart
+                    if aid in old_by_appid and old_by_appid[aid].get("removed"):
+                        g.pop("removed", None)
                 if aid is not None and aid in old_by_appid:
                     for k, v in old_by_appid[aid].items():
                         if k not in g:
                             g[k] = v
+            # Mark games no longer in the cart as removed; preserve previously-removed ones
+            for aid, og in old_by_appid.items():
+                if aid not in cart_appids:
+                    if not og.get("removed"):
+                        og["removed"] = True
+                    removed.append(og)
         except (json.JSONDecodeError, KeyError):
             pass
 
-    out = {"currency": currency, "count": len(games), "games": games}
+    all_games = games + removed
+    out = {"currency": currency, "count": len(games), "games": all_games}
     out_path.write_text(
         json.dumps(out, indent=2, ensure_ascii=False)
     )
-    print(f"\nWrote {len(games)} game(s) to {args.output}")
+    msg = f"\nWrote {len(games)} game(s) to {args.output}"
+    if removed:
+        msg += f" ({len(removed)} removed)"
+    print(msg)
     return 0
 
 

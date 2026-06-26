@@ -1,6 +1,6 @@
 {
   "currency": "cad",
-  "count": 46,
+  "count": 35,
   "games": [
     {
       "name": "The Witcher 3: Wild Hunt",
@@ -75,24 +75,6 @@
       "dropped": false
     },
     {
-      "name": "Firewatch",
-      "appid": 383870,
-      "price_cad": 5.19,
-      "discount_percentage": 80,
-      "linux_native": true,
-      "protondb_tier": null,
-      "review_score": "Very Positive",
-      "ai_fun_rating": 0.74,
-      "ai_fun_rating_panel": {
-        "gemini": 0.83,
-        "glm": 0.7,
-        "codex": 0.74
-      },
-      "ai_fun_rating_at": "2026-06-26T02:32:56Z",
-      "price_history": "above_low",
-      "dropped": true
-    },
-    {
       "name": "The Entropy Centre",
       "appid": 1730590,
       "price_cad": 5.19,
@@ -109,77 +91,6 @@
       "ai_fun_rating_at": "2026-06-26T02:32:56Z",
       "price_history": "matches_low",
       "dropped": false
-    },
-    {
-      "name": "Red Dead Redemption 2",
-      "appid": 1174180,
-      "price_cad": 19.99,
-      "discount_percentage": 75,
-      "linux_native": false,
-      "protondb_tier": "gold",
-      "review_score": "Very Positive",
-      "ai_fun_rating": 0.92,
-      "ai_fun_rating_panel": {
-        "gemini": 0.95,
-        "codex": 0.92,
-        "glm": 0.92
-      },
-      "ai_fun_rating_at": "2026-06-26T03:07:40.529390+00:00",
-      "price_history": "matches_low",
-      "dropped": true
-    },
-    {
-      "name": "XCOM® 2",
-      "appid": 268500,
-      "price_cad": 4.49,
-      "discount_percentage": 85,
-      "linux_native": true,
-      "protondb_tier": null,
-      "review_score": "Very Positive",
-      "ai_fun_rating": 0.88,
-      "ai_fun_rating_panel": {
-        "gemini": 0.88,
-        "codex": 0.9,
-        "glm": 0.88
-      },
-      "ai_fun_rating_at": "2026-06-26T03:07:40.529390+00:00",
-      "price_history": "above_low",
-      "dropped": true
-    },
-    {
-      "name": "Project Zomboid",
-      "appid": 108600,
-      "price_cad": 17.41,
-      "discount_percentage": 33,
-      "linux_native": true,
-      "protondb_tier": null,
-      "review_score": "Very Positive",
-      "ai_fun_rating": 0.85,
-      "ai_fun_rating_panel": {
-        "codex": 0.86,
-        "glm": 0.85
-      },
-      "ai_fun_rating_at": "2026-06-26T03:08:39.058913+00:00",
-      "price_history": "above_low",
-      "dropped": true
-    },
-    {
-      "name": "Kenshi",
-      "appid": 233860,
-      "price_cad": 13.59,
-      "discount_percentage": 60,
-      "linux_native": false,
-      "protondb_tier": "platinum",
-      "review_score": "Overwhelmingly Positive",
-      "ai_fun_rating": 0.88,
-      "ai_fun_rating_panel": {
-        "gemini": 0.95,
-        "codex": 0.88,
-        "glm": 0.88
-      },
-      "ai_fun_rating_at": "2026-06-26T03:07:40.529390+00:00",
-      "price_history": "above_low",
-      "dropped": true
     },
     {
       "name": "The Binding of Isaac: Rebirth",
@@ -360,60 +271,6 @@
       "dropped": false
     },
     {
-      "name": "Kerbal Space Program",
-      "appid": 220200,
-      "price_cad": 12.99,
-      "discount_percentage": 75,
-      "linux_native": true,
-      "protondb_tier": null,
-      "review_score": "Overwhelmingly Positive",
-      "ai_fun_rating": 0.93,
-      "ai_fun_rating_panel": {
-        "gemini": 0.72,
-        "glm": 0.93,
-        "codex": 0.94
-      },
-      "ai_fun_rating_at": "2026-06-26T02:40:00Z",
-      "price_history": "above_low",
-      "dropped": true
-    },
-    {
-      "name": "Hollow Knight",
-      "appid": 367520,
-      "price_cad": 9.74,
-      "discount_percentage": 50,
-      "linux_native": true,
-      "protondb_tier": null,
-      "review_score": "Overwhelmingly Positive",
-      "ai_fun_rating": 0.96,
-      "ai_fun_rating_panel": {
-        "gemini": 0.96,
-        "glm": 0.96,
-        "codex": 0.94
-      },
-      "ai_fun_rating_at": "2026-06-26T02:40:00Z",
-      "price_history": "above_low",
-      "dropped": true
-    },
-    {
-      "name": "Shadow of the Tomb Raider: Definitive Edition",
-      "appid": 750920,
-      "price_cad": 7.79,
-      "discount_percentage": 85,
-      "linux_native": true,
-      "protondb_tier": null,
-      "review_score": "Very Positive",
-      "ai_fun_rating": 0.79,
-      "ai_fun_rating_panel": {
-        "gemini": 0.8,
-        "codex": 0.79,
-        "glm": 0.78
-      },
-      "ai_fun_rating_at": "2026-06-26T03:07:40.529390+00:00",
-      "price_history": "above_low",
-      "dropped": true
-    },
-    {
       "name": "Save the Reactor",
       "appid": 1876560,
       "price_cad": 1.29,
@@ -447,42 +304,6 @@
       "ai_fun_rating_at": "2026-06-26T02:40:00Z",
       "price_history": "matches_low",
       "dropped": false
-    },
-    {
-      "name": "Noita",
-      "appid": 881100,
-      "price_cad": 9.11,
-      "discount_percentage": 60,
-      "linux_native": false,
-      "protondb_tier": "platinum",
-      "review_score": "Overwhelmingly Positive",
-      "ai_fun_rating": 0.92,
-      "ai_fun_rating_panel": {
-        "gemini": 0.95,
-        "codex": 0.89,
-        "glm": 0.92
-      },
-      "ai_fun_rating_at": "2026-06-26T03:07:40.529390+00:00",
-      "price_history": "matches_low",
-      "dropped": true
-    },
-    {
-      "name": "Outward Definitive Edition",
-      "appid": 794260,
-      "price_cad": 6.59,
-      "discount_percentage": 88,
-      "linux_native": false,
-      "protondb_tier": "platinum",
-      "review_score": "Mostly Positive",
-      "ai_fun_rating": 0.72,
-      "ai_fun_rating_panel": {
-        "gemini": 0.8,
-        "codex": 0.72,
-        "glm": 0.68
-      },
-      "ai_fun_rating_at": "2026-06-26T03:07:40.529390+00:00",
-      "price_history": "above_low",
-      "dropped": true
     },
     {
       "name": "Besiege",
@@ -788,24 +609,6 @@
       "dropped": false
     },
     {
-      "name": "Sifu",
-      "appid": 2138710,
-      "price_cad": 10.99,
-      "discount_percentage": 75,
-      "linux_native": false,
-      "protondb_tier": "platinum",
-      "review_score": "Very Positive",
-      "ai_fun_rating": 0.86,
-      "ai_fun_rating_panel": {
-        "gemini": 0.9,
-        "glm": 0.85,
-        "codex": 0.86
-      },
-      "ai_fun_rating_at": "2026-06-26T03:25:32.185494+00:00",
-      "price_history": "matches_low",
-      "dropped": true
-    },
-    {
       "name": "Bendy and the Dark Revival",
       "appid": 1063660,
       "price_cad": 1.99,
@@ -822,6 +625,214 @@
       "ai_fun_rating_at": "2026-06-26T04:22:23.027815+00:00",
       "price_history": "new_low",
       "dropped": false
+    },
+    {
+      "name": "Firewatch",
+      "appid": 383870,
+      "price_cad": 5.19,
+      "discount_percentage": 80,
+      "linux_native": true,
+      "protondb_tier": null,
+      "review_score": "Very Positive",
+      "ai_fun_rating": 0.74,
+      "ai_fun_rating_panel": {
+        "gemini": 0.83,
+        "glm": 0.7,
+        "codex": 0.74
+      },
+      "ai_fun_rating_at": "2026-06-26T02:32:56Z",
+      "price_history": "above_low",
+      "dropped": true,
+      "removed": true
+    },
+    {
+      "name": "Red Dead Redemption 2",
+      "appid": 1174180,
+      "price_cad": 19.99,
+      "discount_percentage": 75,
+      "linux_native": false,
+      "protondb_tier": "gold",
+      "review_score": "Very Positive",
+      "ai_fun_rating": 0.92,
+      "ai_fun_rating_panel": {
+        "gemini": 0.95,
+        "codex": 0.92,
+        "glm": 0.92
+      },
+      "ai_fun_rating_at": "2026-06-26T03:07:40.529390+00:00",
+      "price_history": "matches_low",
+      "dropped": true,
+      "removed": true
+    },
+    {
+      "name": "XCOM® 2",
+      "appid": 268500,
+      "price_cad": 4.49,
+      "discount_percentage": 85,
+      "linux_native": true,
+      "protondb_tier": null,
+      "review_score": "Very Positive",
+      "ai_fun_rating": 0.88,
+      "ai_fun_rating_panel": {
+        "gemini": 0.88,
+        "codex": 0.9,
+        "glm": 0.88
+      },
+      "ai_fun_rating_at": "2026-06-26T03:07:40.529390+00:00",
+      "price_history": "above_low",
+      "dropped": true,
+      "removed": true
+    },
+    {
+      "name": "Project Zomboid",
+      "appid": 108600,
+      "price_cad": 17.41,
+      "discount_percentage": 33,
+      "linux_native": true,
+      "protondb_tier": null,
+      "review_score": "Very Positive",
+      "ai_fun_rating": 0.85,
+      "ai_fun_rating_panel": {
+        "codex": 0.86,
+        "glm": 0.85
+      },
+      "ai_fun_rating_at": "2026-06-26T03:08:39.058913+00:00",
+      "price_history": "above_low",
+      "dropped": true,
+      "removed": true
+    },
+    {
+      "name": "Kenshi",
+      "appid": 233860,
+      "price_cad": 13.59,
+      "discount_percentage": 60,
+      "linux_native": false,
+      "protondb_tier": "platinum",
+      "review_score": "Overwhelmingly Positive",
+      "ai_fun_rating": 0.88,
+      "ai_fun_rating_panel": {
+        "gemini": 0.95,
+        "codex": 0.88,
+        "glm": 0.88
+      },
+      "ai_fun_rating_at": "2026-06-26T03:07:40.529390+00:00",
+      "price_history": "above_low",
+      "dropped": true,
+      "removed": true
+    },
+    {
+      "name": "Kerbal Space Program",
+      "appid": 220200,
+      "price_cad": 12.99,
+      "discount_percentage": 75,
+      "linux_native": true,
+      "protondb_tier": null,
+      "review_score": "Overwhelmingly Positive",
+      "ai_fun_rating": 0.93,
+      "ai_fun_rating_panel": {
+        "gemini": 0.72,
+        "glm": 0.93,
+        "codex": 0.94
+      },
+      "ai_fun_rating_at": "2026-06-26T02:40:00Z",
+      "price_history": "above_low",
+      "dropped": true,
+      "removed": true
+    },
+    {
+      "name": "Hollow Knight",
+      "appid": 367520,
+      "price_cad": 9.74,
+      "discount_percentage": 50,
+      "linux_native": true,
+      "protondb_tier": null,
+      "review_score": "Overwhelmingly Positive",
+      "ai_fun_rating": 0.96,
+      "ai_fun_rating_panel": {
+        "gemini": 0.96,
+        "glm": 0.96,
+        "codex": 0.94
+      },
+      "ai_fun_rating_at": "2026-06-26T02:40:00Z",
+      "price_history": "above_low",
+      "dropped": true,
+      "removed": true
+    },
+    {
+      "name": "Shadow of the Tomb Raider: Definitive Edition",
+      "appid": 750920,
+      "price_cad": 7.79,
+      "discount_percentage": 85,
+      "linux_native": true,
+      "protondb_tier": null,
+      "review_score": "Very Positive",
+      "ai_fun_rating": 0.79,
+      "ai_fun_rating_panel": {
+        "gemini": 0.8,
+        "codex": 0.79,
+        "glm": 0.78
+      },
+      "ai_fun_rating_at": "2026-06-26T03:07:40.529390+00:00",
+      "price_history": "above_low",
+      "dropped": true,
+      "removed": true
+    },
+    {
+      "name": "Noita",
+      "appid": 881100,
+      "price_cad": 9.11,
+      "discount_percentage": 60,
+      "linux_native": false,
+      "protondb_tier": "platinum",
+      "review_score": "Overwhelmingly Positive",
+      "ai_fun_rating": 0.92,
+      "ai_fun_rating_panel": {
+        "gemini": 0.95,
+        "codex": 0.89,
+        "glm": 0.92
+      },
+      "ai_fun_rating_at": "2026-06-26T03:07:40.529390+00:00",
+      "price_history": "matches_low",
+      "dropped": true,
+      "removed": true
+    },
+    {
+      "name": "Outward Definitive Edition",
+      "appid": 794260,
+      "price_cad": 6.59,
+      "discount_percentage": 88,
+      "linux_native": false,
+      "protondb_tier": "platinum",
+      "review_score": "Mostly Positive",
+      "ai_fun_rating": 0.72,
+      "ai_fun_rating_panel": {
+        "gemini": 0.8,
+        "codex": 0.72,
+        "glm": 0.68
+      },
+      "ai_fun_rating_at": "2026-06-26T03:07:40.529390+00:00",
+      "price_history": "above_low",
+      "dropped": true,
+      "removed": true
+    },
+    {
+      "name": "Sifu",
+      "appid": 2138710,
+      "price_cad": 10.99,
+      "discount_percentage": 75,
+      "linux_native": false,
+      "protondb_tier": "platinum",
+      "review_score": "Very Positive",
+      "ai_fun_rating": 0.86,
+      "ai_fun_rating_panel": {
+        "gemini": 0.9,
+        "glm": 0.85,
+        "codex": 0.86
+      },
+      "ai_fun_rating_at": "2026-06-26T03:25:32.185494+00:00",
+      "price_history": "matches_low",
+      "dropped": true,
+      "removed": true
     }
   ]
 }
