@@ -1,0 +1,228 @@
+{
+  "currency": "cad",
+  "count": 37,
+  "games": [
+    {
+      "name": "The Witcher 3: Wild Hunt",
+      "price_cad": 5.59,
+      "discount_percentage": 90,
+      "linux_native": false
+    },
+    {
+      "name": "Getting Over It with Bennett Foddy",
+      "price_cad": 1.79,
+      "discount_percentage": 80,
+      "linux_native": true
+    },
+    {
+      "name": "Paperwork",
+      "price_cad": 2.49,
+      "discount_percentage": 50,
+      "linux_native": false
+    },
+    {
+      "name": "HITMAN World of Assassination",
+      "price_cad": 3.89,
+      "discount_percentage": 90,
+      "linux_native": false
+    },
+    {
+      "name": "Firewatch",
+      "price_cad": 5.19,
+      "discount_percentage": 80,
+      "linux_native": true
+    },
+    {
+      "name": "The Entropy Centre",
+      "price_cad": 5.19,
+      "discount_percentage": 80,
+      "linux_native": false
+    },
+    {
+      "name": "Red Dead Redemption 2",
+      "price_cad": 19.99,
+      "discount_percentage": 75,
+      "linux_native": false
+    },
+    {
+      "name": "XCOM® 2",
+      "price_cad": 4.49,
+      "discount_percentage": 85,
+      "linux_native": true
+    },
+    {
+      "name": "Project Zomboid",
+      "price_cad": 17.41,
+      "discount_percentage": 33,
+      "linux_native": true
+    },
+    {
+      "name": "Kenshi",
+      "price_cad": 13.59,
+      "discount_percentage": 60,
+      "linux_native": false
+    },
+    {
+      "name": "The Binding of Isaac: Rebirth",
+      "price_cad": 1.69,
+      "discount_percentage": 90,
+      "linux_native": true
+    },
+    {
+      "name": "QUICKERFLAK",
+      "price_cad": 0.64,
+      "discount_percentage": 90,
+      "linux_native": false
+    },
+    {
+      "name": "Barro 22",
+      "price_cad": 0.64,
+      "discount_percentage": 90,
+      "linux_native": false
+    },
+    {
+      "name": "Hentai Killer",
+      "price_cad": 0.64,
+      "discount_percentage": 50,
+      "linux_native": false
+    },
+    {
+      "name": "SOS OPS!",
+      "price_cad": 0.69,
+      "discount_percentage": 90,
+      "linux_native": false
+    },
+    {
+      "name": "Lords of the Realm II",
+      "price_cad": 0.93,
+      "discount_percentage": 76,
+      "linux_native": false
+    },
+    {
+      "name": "CARRION",
+      "price_cad": 2.59,
+      "discount_percentage": 90,
+      "linux_native": true
+    },
+    {
+      "name": "Hotline Miami",
+      "price_cad": 1.29,
+      "discount_percentage": 90,
+      "linux_native": true
+    },
+    {
+      "name": "Cruelty Squad",
+      "price_cad": 2.27,
+      "discount_percentage": 90,
+      "linux_native": false
+    },
+    {
+      "name": "Battlefield™ 1",
+      "price_cad": 2.74,
+      "discount_percentage": 95,
+      "linux_native": false
+    },
+    {
+      "name": "Mass Effect™: Andromeda Deluxe Edition",
+      "price_cad": 4.39,
+      "discount_percentage": 92,
+      "linux_native": false
+    },
+    {
+      "name": "Kerbal Space Program",
+      "price_cad": 12.99,
+      "discount_percentage": 75,
+      "linux_native": true
+    },
+    {
+      "name": "Hollow Knight",
+      "price_cad": 9.74,
+      "discount_percentage": 50,
+      "linux_native": true
+    },
+    {
+      "name": "Shadow of the Tomb Raider: Definitive Edition",
+      "price_cad": 7.79,
+      "discount_percentage": 85,
+      "linux_native": true
+    },
+    {
+      "name": "Save the Reactor",
+      "price_cad": 1.29,
+      "discount_percentage": 80,
+      "linux_native": true
+    },
+    {
+      "name": "The Surge 2",
+      "price_cad": 3.99,
+      "discount_percentage": 90,
+      "linux_native": false
+    },
+    {
+      "name": "Noita",
+      "price_cad": 9.11,
+      "discount_percentage": 60,
+      "linux_native": false
+    },
+    {
+      "name": "Outward Definitive Edition",
+      "price_cad": 6.59,
+      "discount_percentage": 88,
+      "linux_native": false
+    },
+    {
+      "name": "Besiege",
+      "price_cad": 1.94,
+      "discount_percentage": 90,
+      "linux_native": true
+    },
+    {
+      "name": "Frostpunk x The Invincible",
+      "price_cad": 3.59,
+      "discount_percentage": 90,
+      "linux_native": false
+    },
+    {
+      "name": "Planet Zoo",
+      "price_cad": 2.57,
+      "discount_percentage": 95,
+      "linux_native": false
+    },
+    {
+      "name": "Dishonored",
+      "price_cad": 2.69,
+      "discount_percentage": 90,
+      "linux_native": false
+    },
+    {
+      "name": "Before Your Eyes",
+      "price_cad": 2.59,
+      "discount_percentage": 80,
+      "linux_native": false
+    },
+    {
+      "name": "Don't Starve Together",
+      "price_cad": 1.69,
+      "discount_percentage": 90,
+      "linux_native": true
+    },
+    {
+      "name": "Dying Light",
+      "price_cad": 3.3,
+      "discount_percentage": 90,
+      "linux_native": true
+    },
+    {
+      "name": "Stronghold Crusader HD (2012)",
+      "price_cad": 2.19,
+      "discount_percentage": 80,
+      "linux_native": false
+    },
+    {
+      "name": "Buckshot Roulette",
+      "price_cad": 1.94,
+      "discount_percentage": 50,
+      "linux_native": true
+    }
+  ]
+}
