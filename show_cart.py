@@ -78,7 +78,7 @@ def print_table(games: list[dict], currency: str) -> None:
     pkey = price_key_for_game(games[0]) if games else f"price_{currency}"
     sorted_games = sorted(games, key=lambda g: g.get(pkey, 0) or 0)
 
-    rows: list[tuple[str, str, str, str, str, str, str, int | None]] = []
+    rows: list[tuple[str, str, str, str, str, str, str, int | None, float | None]] = []
     for game in sorted_games:
         price = game.get(pkey, 0) or 0
         discount = game.get("discount_percentage")
@@ -94,13 +94,14 @@ def print_table(games: list[dict], currency: str) -> None:
                 format_review(game.get("review_score")),
                 format_fun_rating(game.get("ai_fun_rating")),
                 discount,
+                game.get("ai_fun_rating"),
             )
         )
 
     visible_cols = 7
     headers = ("Game", "Price", "Discount", "Linux", "ProtonDB", "Rating", "AI Fun", None)
     widths = [len(str(h)) if h else 0 for h in headers]
-    for name, price, discount, linux, proton, review, fun, _ in rows:
+    for name, price, discount, linux, proton, review, fun, _, _ in rows:
         widths[0] = max(widths[0], len(name))
         widths[1] = max(widths[1], len(price))
         widths[2] = max(widths[2], len(discount))
@@ -108,7 +109,7 @@ def print_table(games: list[dict], currency: str) -> None:
         widths[4] = max(widths[4], len(proton))
         widths[5] = max(widths[5], len(review))
         widths[6] = max(widths[6], len(fun))
-    widths[7] = 0  # hidden column
+    widths[7] = 0  # hidden columns (discount raw + fun raw)
 
     def line(char: str = "─") -> str:
         parts = [char * (w + 2) for w in widths[:visible_cols]]
@@ -128,6 +129,14 @@ def print_table(games: list[dict], currency: str) -> None:
                 parts[2] = f" {RED}{discount_str:<{widths[2]}}{RESET} "
             elif raw_discount < 80:
                 parts[2] = f" {YELLOW}{discount_str:<{widths[2]}}{RESET} "
+        # Color AI fun rating: red <0.65, yellow 0.65-0.79, no color >=0.80
+        fun_str = cells[6]
+        raw_fun = cells[8] if len(cells) > 8 else None
+        if raw_fun is not None and fun_str != "AI Fun" and fun_str != "—":
+            if raw_fun < 0.65:
+                parts[6] = f" {RED}{fun_str:<{widths[6]}}{RESET} "
+            elif raw_fun < 0.80:
+                parts[6] = f" {YELLOW}{fun_str:<{widths[6]}}{RESET} "
         return "│" + "│".join(parts) + "│"
 
     top = "┌" + "┬".join("─" * (w + 2) for w in widths[:visible_cols]) + "┐"
