@@ -47,8 +47,8 @@ def format_linux(value: bool | None) -> str:
 
 def format_proton(tier: str | None, linux_native: bool | None) -> str:
     if linux_native is True:
-        return "—"
-    return tier or "—"
+        return ""
+    return tier or ""
 
 
 def print_table(games: list[dict], currency: str) -> None:
