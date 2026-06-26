@@ -1,0 +1,719 @@
+{
+  "currency": "cad",
+  "count": 45,
+  "games": [
+    {
+      "name": "The Witcher 3: Wild Hunt",
+      "appid": 292030,
+      "price_cad": 5.59,
+      "discount_percentage": 90,
+      "linux_native": false,
+      "protondb_tier": "platinum",
+      "review_score": "Overwhelmingly Positive",
+      "ai_fun_rating": 0.95,
+      "ai_fun_rating_panel": {
+        "gemini": 0.95,
+        "glm": 0.95,
+        "codex": 0.94
+      },
+      "ai_fun_rating_at": "2026-06-26T02:32:56Z"
+    },
+    {
+      "name": "Getting Over It with Bennett Foddy",
+      "appid": 240720,
+      "price_cad": 1.79,
+      "discount_percentage": 80,
+      "linux_native": true,
+      "protondb_tier": null,
+      "review_score": "Very Positive",
+      "ai_fun_rating": 0.74,
+      "ai_fun_rating_panel": {
+        "gemini": 0.8,
+        "codex": 0.74,
+        "glm": 0.72
+      },
+      "ai_fun_rating_at": "2026-06-26T03:07:40.529390+00:00"
+    },
+    {
+      "name": "Paperwork",
+      "appid": 3723530,
+      "price_cad": 2.49,
+      "discount_percentage": 50,
+      "linux_native": false,
+      "protondb_tier": null,
+      "review_score": "Very Positive",
+      "ai_fun_rating": 0.78,
+      "ai_fun_rating_panel": {
+        "gemini": 0.84,
+        "codex": 0.78,
+        "glm": 0.5
+      },
+      "ai_fun_rating_at": "2026-06-26T03:07:40.529390+00:00"
+    },
+    {
+      "name": "HITMAN World of Assassination",
+      "appid": 1659040,
+      "price_cad": 3.89,
+      "discount_percentage": 90,
+      "linux_native": false,
+      "protondb_tier": "gold",
+      "review_score": "Very Positive",
+      "ai_fun_rating": 0.92,
+      "ai_fun_rating_panel": {
+        "gemini": 0.95,
+        "codex": 0.89,
+        "glm": 0.92
+      },
+      "ai_fun_rating_at": "2026-06-26T03:07:40.529390+00:00"
+    },
+    {
+      "name": "Firewatch",
+      "appid": 383870,
+      "price_cad": 5.19,
+      "discount_percentage": 80,
+      "linux_native": true,
+      "protondb_tier": null,
+      "review_score": "Very Positive",
+      "ai_fun_rating": 0.74,
+      "ai_fun_rating_panel": {
+        "gemini": 0.83,
+        "glm": 0.7,
+        "codex": 0.74
+      },
+      "ai_fun_rating_at": "2026-06-26T02:32:56Z"
+    },
+    {
+      "name": "The Entropy Centre",
+      "appid": 1730590,
+      "price_cad": 5.19,
+      "discount_percentage": 80,
+      "linux_native": false,
+      "protondb_tier": "platinum",
+      "review_score": "Very Positive",
+      "ai_fun_rating": 0.81,
+      "ai_fun_rating_panel": {
+        "gemini": 0.82,
+        "glm": 0.81,
+        "codex": 0.81
+      },
+      "ai_fun_rating_at": "2026-06-26T02:32:56Z"
+    },
+    {
+      "name": "Red Dead Redemption 2",
+      "appid": 1174180,
+      "price_cad": 19.99,
+      "discount_percentage": 75,
+      "linux_native": false,
+      "protondb_tier": "gold",
+      "review_score": "Very Positive",
+      "ai_fun_rating": 0.92,
+      "ai_fun_rating_panel": {
+        "gemini": 0.95,
+        "codex": 0.92,
+        "glm": 0.92
+      },
+      "ai_fun_rating_at": "2026-06-26T03:07:40.529390+00:00"
+    },
+    {
+      "name": "XCOM\u00ae 2",
+      "appid": 268500,
+      "price_cad": 4.49,
+      "discount_percentage": 85,
+      "linux_native": true,
+      "protondb_tier": null,
+      "review_score": "Very Positive",
+      "ai_fun_rating": 0.88,
+      "ai_fun_rating_panel": {
+        "gemini": 0.88,
+        "codex": 0.9,
+        "glm": 0.88
+      },
+      "ai_fun_rating_at": "2026-06-26T03:07:40.529390+00:00"
+    },
+    {
+      "name": "Project Zomboid",
+      "appid": 108600,
+      "price_cad": 17.41,
+      "discount_percentage": 33,
+      "linux_native": true,
+      "protondb_tier": null,
+      "review_score": "Very Positive",
+      "ai_fun_rating": 0.85,
+      "ai_fun_rating_panel": {
+        "codex": 0.86,
+        "glm": 0.85
+      },
+      "ai_fun_rating_at": "2026-06-26T03:08:39.058913+00:00"
+    },
+    {
+      "name": "Kenshi",
+      "appid": 233860,
+      "price_cad": 13.59,
+      "discount_percentage": 60,
+      "linux_native": false,
+      "protondb_tier": "platinum",
+      "review_score": "Overwhelmingly Positive",
+      "ai_fun_rating": 0.88,
+      "ai_fun_rating_panel": {
+        "gemini": 0.95,
+        "codex": 0.88,
+        "glm": 0.88
+      },
+      "ai_fun_rating_at": "2026-06-26T03:07:40.529390+00:00"
+    },
+    {
+      "name": "The Binding of Isaac: Rebirth",
+      "appid": 250900,
+      "price_cad": 1.69,
+      "discount_percentage": 90,
+      "linux_native": true,
+      "protondb_tier": null,
+      "review_score": "Overwhelmingly Positive",
+      "ai_fun_rating": 0.95,
+      "ai_fun_rating_panel": {
+        "gemini": 0.96,
+        "codex": 0.94,
+        "glm": 0.95
+      },
+      "ai_fun_rating_at": "2026-06-26T03:07:40.529390+00:00"
+    },
+    {
+      "name": "QUICKERFLAK",
+      "appid": 1836120,
+      "price_cad": 0.64,
+      "discount_percentage": 90,
+      "linux_native": false,
+      "protondb_tier": "platinum",
+      "review_score": "Very Positive",
+      "ai_fun_rating": 0.74,
+      "ai_fun_rating_panel": {
+        "gemini": 0.68,
+        "codex": 0.74,
+        "glm": 0.78
+      },
+      "ai_fun_rating_at": "2026-06-26T03:07:40.529390+00:00"
+    },
+    {
+      "name": "Barro 22",
+      "appid": 1797610,
+      "price_cad": 0.64,
+      "discount_percentage": 90,
+      "linux_native": false,
+      "protondb_tier": null,
+      "review_score": "Very Positive",
+      "ai_fun_rating": 0.5,
+      "ai_fun_rating_panel": {
+        "gemini": 0.55,
+        "glm": 0.45
+      },
+      "ai_fun_rating_at": "2026-06-26T03:07:40.529390+00:00"
+    },
+    {
+      "name": "Hentai Killer",
+      "appid": 1157340,
+      "price_cad": 0.64,
+      "discount_percentage": 50,
+      "linux_native": false,
+      "protondb_tier": "gold",
+      "review_score": "Very Positive",
+      "ai_fun_rating": 0.48,
+      "ai_fun_rating_panel": {
+        "gemini": 0.4,
+        "codex": 0.48,
+        "glm": 0.5
+      },
+      "ai_fun_rating_at": "2026-06-26T03:07:40.529390+00:00"
+    },
+    {
+      "name": "SOS OPS!",
+      "appid": 2475460,
+      "price_cad": 0.69,
+      "discount_percentage": 90,
+      "linux_native": false,
+      "protondb_tier": "platinum",
+      "review_score": "Mostly Positive",
+      "ai_fun_rating": 0.73,
+      "ai_fun_rating_panel": {
+        "codex": 0.74,
+        "glm": 0.72
+      },
+      "ai_fun_rating_at": "2026-06-26T03:08:39.058913+00:00"
+    },
+    {
+      "name": "Lords of the Realm II",
+      "appid": 397350,
+      "price_cad": 0.93,
+      "discount_percentage": 76,
+      "linux_native": false,
+      "protondb_tier": "gold",
+      "review_score": "Overwhelmingly Positive",
+      "ai_fun_rating": 0.88,
+      "ai_fun_rating_panel": {
+        "gemini": 0.9,
+        "codex": 0.88,
+        "glm": 0.78
+      },
+      "ai_fun_rating_at": "2026-06-26T03:07:40.529390+00:00"
+    },
+    {
+      "name": "CARRION",
+      "appid": 953490,
+      "price_cad": 2.59,
+      "discount_percentage": 90,
+      "linux_native": true,
+      "protondb_tier": null,
+      "review_score": "Very Positive",
+      "ai_fun_rating": 0.82,
+      "ai_fun_rating_panel": {
+        "gemini": 0.83,
+        "glm": 0.74,
+        "codex": 0.82
+      },
+      "ai_fun_rating_at": "2026-06-26T02:40:00Z"
+    },
+    {
+      "name": "Hotline Miami",
+      "appid": 219150,
+      "price_cad": 1.29,
+      "discount_percentage": 90,
+      "linux_native": true,
+      "protondb_tier": null,
+      "review_score": "Overwhelmingly Positive",
+      "ai_fun_rating": 0.9,
+      "ai_fun_rating_panel": {
+        "gemini": 0.95,
+        "codex": 0.9,
+        "glm": 0.9
+      },
+      "ai_fun_rating_at": "2026-06-26T03:07:40.529390+00:00"
+    },
+    {
+      "name": "Cruelty Squad",
+      "appid": 1388770,
+      "price_cad": 2.27,
+      "discount_percentage": 90,
+      "linux_native": false,
+      "protondb_tier": "gold",
+      "review_score": "Overwhelmingly Positive",
+      "ai_fun_rating": 0.85,
+      "ai_fun_rating_panel": {
+        "gemini": 0.72,
+        "codex": 0.89,
+        "glm": 0.85
+      },
+      "ai_fun_rating_at": "2026-06-26T03:07:40.529390+00:00"
+    },
+    {
+      "name": "Battlefield\u2122 1",
+      "appid": 1238840,
+      "price_cad": 2.74,
+      "discount_percentage": 95,
+      "linux_native": false,
+      "protondb_tier": "silver",
+      "review_score": "Very Positive",
+      "ai_fun_rating": 0.88,
+      "ai_fun_rating_panel": {
+        "gemini": 0.89,
+        "codex": 0.87,
+        "glm": 0.88
+      },
+      "ai_fun_rating_at": "2026-06-26T03:07:40.529390+00:00"
+    },
+    {
+      "name": "Kerbal Space Program",
+      "appid": 220200,
+      "price_cad": 12.99,
+      "discount_percentage": 75,
+      "linux_native": true,
+      "protondb_tier": null,
+      "review_score": "Overwhelmingly Positive",
+      "ai_fun_rating": 0.93,
+      "ai_fun_rating_panel": {
+        "gemini": 0.72,
+        "glm": 0.93,
+        "codex": 0.94
+      },
+      "ai_fun_rating_at": "2026-06-26T02:40:00Z"
+    },
+    {
+      "name": "Hollow Knight",
+      "appid": 367520,
+      "price_cad": 9.74,
+      "discount_percentage": 50,
+      "linux_native": true,
+      "protondb_tier": null,
+      "review_score": "Overwhelmingly Positive",
+      "ai_fun_rating": 0.96,
+      "ai_fun_rating_panel": {
+        "gemini": 0.96,
+        "glm": 0.96,
+        "codex": 0.94
+      },
+      "ai_fun_rating_at": "2026-06-26T02:40:00Z"
+    },
+    {
+      "name": "Shadow of the Tomb Raider: Definitive Edition",
+      "appid": 750920,
+      "price_cad": 7.79,
+      "discount_percentage": 85,
+      "linux_native": true,
+      "protondb_tier": null,
+      "review_score": "Very Positive",
+      "ai_fun_rating": 0.79,
+      "ai_fun_rating_panel": {
+        "gemini": 0.8,
+        "codex": 0.79,
+        "glm": 0.78
+      },
+      "ai_fun_rating_at": "2026-06-26T03:07:40.529390+00:00"
+    },
+    {
+      "name": "Save the Reactor",
+      "appid": 1876560,
+      "price_cad": 1.29,
+      "discount_percentage": 80,
+      "linux_native": true,
+      "protondb_tier": null,
+      "review_score": "Very Positive",
+      "ai_fun_rating": 0.75,
+      "ai_fun_rating_panel": {
+        "codex": 0.78,
+        "glm": 0.72
+      },
+      "ai_fun_rating_at": "2026-06-26T03:07:40.529390+00:00"
+    },
+    {
+      "name": "The Surge 2",
+      "appid": 644830,
+      "price_cad": 3.99,
+      "discount_percentage": 90,
+      "linux_native": false,
+      "protondb_tier": "gold",
+      "review_score": "Mostly Positive",
+      "ai_fun_rating": 0.77,
+      "ai_fun_rating_panel": {
+        "gemini": 0.78,
+        "glm": 0.74,
+        "codex": 0.77
+      },
+      "ai_fun_rating_at": "2026-06-26T02:40:00Z"
+    },
+    {
+      "name": "Noita",
+      "appid": 881100,
+      "price_cad": 9.11,
+      "discount_percentage": 60,
+      "linux_native": false,
+      "protondb_tier": "platinum",
+      "review_score": "Overwhelmingly Positive",
+      "ai_fun_rating": 0.92,
+      "ai_fun_rating_panel": {
+        "gemini": 0.95,
+        "codex": 0.89,
+        "glm": 0.92
+      },
+      "ai_fun_rating_at": "2026-06-26T03:07:40.529390+00:00"
+    },
+    {
+      "name": "Outward Definitive Edition",
+      "appid": 794260,
+      "price_cad": 6.59,
+      "discount_percentage": 88,
+      "linux_native": false,
+      "protondb_tier": "platinum",
+      "review_score": "Mostly Positive",
+      "ai_fun_rating": 0.72,
+      "ai_fun_rating_panel": {
+        "gemini": 0.8,
+        "codex": 0.72,
+        "glm": 0.68
+      },
+      "ai_fun_rating_at": "2026-06-26T03:07:40.529390+00:00"
+    },
+    {
+      "name": "Besiege",
+      "appid": 346010,
+      "price_cad": 1.94,
+      "discount_percentage": 90,
+      "linux_native": true,
+      "protondb_tier": null,
+      "review_score": "Very Positive",
+      "ai_fun_rating": 0.88,
+      "ai_fun_rating_panel": {
+        "gemini": 0.88,
+        "codex": 0.88,
+        "glm": 0.78
+      },
+      "ai_fun_rating_at": "2026-06-26T03:07:40.529390+00:00"
+    },
+    {
+      "name": "Frostpunk x The Invincible",
+      "appid": 731040,
+      "price_cad": 3.59,
+      "discount_percentage": 90,
+      "linux_native": false,
+      "protondb_tier": "gold",
+      "review_score": "Very Positive",
+      "ai_fun_rating": 0.72,
+      "ai_fun_rating_panel": {
+        "gemini": 0.8,
+        "glm": 0.45,
+        "codex": 0.72
+      },
+      "ai_fun_rating_at": "2026-06-26T02:40:00Z"
+    },
+    {
+      "name": "Planet Zoo",
+      "appid": 703080,
+      "price_cad": 2.57,
+      "discount_percentage": 95,
+      "linux_native": false,
+      "protondb_tier": "gold",
+      "review_score": "Very Positive",
+      "ai_fun_rating": 0.86,
+      "ai_fun_rating_panel": {
+        "gemini": 0.87,
+        "codex": 0.86,
+        "glm": 0.85
+      },
+      "ai_fun_rating_at": "2026-06-26T03:07:40.529390+00:00"
+    },
+    {
+      "name": "Dishonored",
+      "appid": 205100,
+      "price_cad": 2.69,
+      "discount_percentage": 90,
+      "linux_native": false,
+      "protondb_tier": "platinum",
+      "review_score": "Overwhelmingly Positive",
+      "ai_fun_rating": 0.92,
+      "ai_fun_rating_panel": {
+        "gemini": 0.7,
+        "glm": 0.93,
+        "codex": 0.92
+      },
+      "ai_fun_rating_at": "2026-06-26T03:25:32.185494+00:00"
+    },
+    {
+      "name": "Before Your Eyes",
+      "appid": 1082430,
+      "price_cad": 2.59,
+      "discount_percentage": 80,
+      "linux_native": false,
+      "protondb_tier": "gold",
+      "review_score": "Overwhelmingly Positive",
+      "ai_fun_rating": 0.72,
+      "ai_fun_rating_panel": {
+        "gemini": 0.7,
+        "glm": 0.72,
+        "codex": 0.82
+      },
+      "ai_fun_rating_at": "2026-06-26T03:25:32.185494+00:00"
+    },
+    {
+      "name": "Don't Starve Together",
+      "appid": 322330,
+      "price_cad": 1.69,
+      "discount_percentage": 90,
+      "linux_native": true,
+      "protondb_tier": null,
+      "review_score": "Overwhelmingly Positive",
+      "ai_fun_rating": 0.9,
+      "ai_fun_rating_panel": {
+        "gemini": 0.93,
+        "glm": 0.89,
+        "codex": 0.9
+      },
+      "ai_fun_rating_at": "2026-06-26T03:25:32.185494+00:00"
+    },
+    {
+      "name": "Dying Light",
+      "appid": 239140,
+      "price_cad": 3.3,
+      "discount_percentage": 90,
+      "linux_native": true,
+      "protondb_tier": null,
+      "review_score": "Very Positive",
+      "ai_fun_rating": 0.88,
+      "ai_fun_rating_panel": {
+        "gemini": 0.88,
+        "glm": 0.85,
+        "codex": 0.88
+      },
+      "ai_fun_rating_at": "2026-06-26T03:25:32.185494+00:00"
+    },
+    {
+      "name": "Stronghold Crusader HD (2012)",
+      "appid": 40970,
+      "price_cad": 2.19,
+      "discount_percentage": 80,
+      "linux_native": false,
+      "protondb_tier": "gold",
+      "review_score": "Overwhelmingly Positive",
+      "ai_fun_rating": 0.87,
+      "ai_fun_rating_panel": {
+        "gemini": 0.8,
+        "glm": 0.87,
+        "codex": 0.88
+      },
+      "ai_fun_rating_at": "2026-06-26T03:25:32.185494+00:00"
+    },
+    {
+      "name": "Buckshot Roulette",
+      "appid": 2835570,
+      "price_cad": 1.94,
+      "discount_percentage": 50,
+      "linux_native": true,
+      "protondb_tier": null,
+      "review_score": "Overwhelmingly Positive",
+      "ai_fun_rating": 0.88,
+      "ai_fun_rating_panel": {
+        "gemini": 0.9,
+        "glm": 0.85,
+        "codex": 0.88
+      },
+      "ai_fun_rating_at": "2026-06-26T03:25:32.185494+00:00"
+    },
+    {
+      "name": "Tom Clancy's Splinter Cell Chaos Theory\u00ae",
+      "appid": 13570,
+      "price_cad": 2.49,
+      "discount_percentage": 75,
+      "linux_native": false,
+      "protondb_tier": "platinum",
+      "review_score": "Very Positive",
+      "ai_fun_rating": 0.92,
+      "ai_fun_rating_panel": {
+        "gemini": 0.94,
+        "glm": 0.92,
+        "codex": 0.92
+      },
+      "ai_fun_rating_at": "2026-06-26T03:28:41.039208+00:00"
+    },
+    {
+      "name": "Far Cry\u00ae 4",
+      "appid": 298110,
+      "price_cad": 3.99,
+      "discount_percentage": 90,
+      "linux_native": false,
+      "protondb_tier": "gold",
+      "review_score": "Very Positive",
+      "ai_fun_rating": 0.82,
+      "ai_fun_rating_panel": {
+        "gemini": 0.82,
+        "glm": 0.82,
+        "codex": 0.84
+      },
+      "ai_fun_rating_at": "2026-06-26T03:25:32.185494+00:00"
+    },
+    {
+      "name": "Poly Bridge 2",
+      "appid": 1062160,
+      "price_cad": 3.49,
+      "discount_percentage": 80,
+      "linux_native": true,
+      "protondb_tier": null,
+      "review_score": "Overwhelmingly Positive",
+      "ai_fun_rating": 0.88,
+      "ai_fun_rating_panel": {
+        "gemini": 0.89,
+        "codex": 0.86
+      },
+      "ai_fun_rating_at": "2026-06-26T03:25:32.185494+00:00"
+    },
+    {
+      "name": "Dead Space",
+      "appid": 1693980,
+      "price_cad": 7.99,
+      "discount_percentage": 90,
+      "linux_native": false,
+      "protondb_tier": "gold",
+      "review_score": "Very Positive",
+      "ai_fun_rating": 0.88,
+      "ai_fun_rating_panel": {
+        "gemini": 0.9,
+        "glm": 0.88,
+        "codex": 0.88
+      },
+      "ai_fun_rating_at": "2026-06-26T03:25:32.185494+00:00"
+    },
+    {
+      "name": "Mass Effect\u2122 Legendary Edition",
+      "appid": 1328670,
+      "price_cad": 6.39,
+      "discount_percentage": 92,
+      "linux_native": false,
+      "protondb_tier": "gold",
+      "review_score": "Very Positive",
+      "ai_fun_rating": 0.93,
+      "ai_fun_rating_panel": {
+        "gemini": 0.93,
+        "codex": 0.92
+      },
+      "ai_fun_rating_at": "2026-06-26T03:25:32.185494+00:00"
+    },
+    {
+      "name": "Dragon Age\u2122 Inquisition",
+      "appid": 1222690,
+      "price_cad": 5.49,
+      "discount_percentage": 90,
+      "linux_native": false,
+      "protondb_tier": "gold",
+      "review_score": "Mostly Positive",
+      "ai_fun_rating": 0.81,
+      "ai_fun_rating_panel": {
+        "gemini": 0.8,
+        "codex": 0.82
+      },
+      "ai_fun_rating_at": "2026-06-26T03:25:32.185494+00:00"
+    },
+    {
+      "name": "Idols of Ash",
+      "appid": 4450800,
+      "price_cad": 2.87,
+      "discount_percentage": 20,
+      "linux_native": true,
+      "protondb_tier": null,
+      "review_score": "Overwhelmingly Positive",
+      "ai_fun_rating": 0.85,
+      "ai_fun_rating_panel": {
+        "gemini": 0.7,
+        "glm": 0.85,
+        "codex": 0.9
+      },
+      "ai_fun_rating_at": "2026-06-26T03:25:32.185494+00:00"
+    },
+    {
+      "name": "Injustice\u2122 2",
+      "appid": 627270,
+      "price_cad": 6.99,
+      "discount_percentage": 90,
+      "linux_native": false,
+      "protondb_tier": "gold",
+      "review_score": "Very Positive",
+      "ai_fun_rating": 0.82,
+      "ai_fun_rating_panel": {
+        "gemini": 0.68,
+        "glm": 0.82,
+        "codex": 0.86
+      },
+      "ai_fun_rating_at": "2026-06-26T03:25:32.185494+00:00"
+    },
+    {
+      "name": "Sifu",
+      "appid": 2138710,
+      "price_cad": 10.99,
+      "discount_percentage": 75,
+      "linux_native": false,
+      "protondb_tier": "platinum",
+      "review_score": "Very Positive",
+      "ai_fun_rating": 0.86,
+      "ai_fun_rating_panel": {
+        "gemini": 0.9,
+        "glm": 0.85,
+        "codex": 0.86
+      },
+      "ai_fun_rating_at": "2026-06-26T03:25:32.185494+00:00"
+    }
+  ]
+}

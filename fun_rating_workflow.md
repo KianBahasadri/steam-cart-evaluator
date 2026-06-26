@@ -7,8 +7,7 @@ in `games.json`.
 ## Prerequisites
 
 - `games.json` exists (from `./fetch_cart.py`)
-- CLIs on PATH: `cursor-agent`, `claude`, `codex`
-- `PIONEER_API_KEY` set (for GLM via Pioneer gateway)
+- CLIs on PATH: `cursor-agent`, `codex`
 - Repo root: `/home/kian/steam_cart_evaluator`
 
 ## Overview
@@ -96,21 +95,18 @@ timeout 120 cursor-agent --print --output-format text --model gemini-3.5-flash \
   > /tmp/fun-rating-${SLUG}-gemini.md 2>/tmp/fun-rating-${SLUG}-gemini.err
 ```
 
-### GLM 5.2 (Pioneer claude, read-only)
+### GLM 5.2 (cursor-agent, read-only)
 
 ```
-timeout 120 env -u ANTHROPIC_AUTH_TOKEN -u CLAUDE_CODE_OAUTH_TOKEN \
-  ANTHROPIC_API_KEY="$PIONEER_API_KEY" ANTHROPIC_BASE_URL="https://api.pioneer.ai" \
-  claude -p --model zai-org/GLM-5.2 \
-  --disallowed-tools Edit Write NotebookEdit Bash \
-  --allowed-tools WebSearch WebFetch \
+timeout 120 cursor-agent --print --output-format text --model glm-5.2-high \
+  --trust \
   "$(cat /tmp/fun-rating-${SLUG}-prompt.md)" \
   > /tmp/fun-rating-${SLUG}-glm.md 2>/tmp/fun-rating-${SLUG}-glm.err
 ```
 
-The `claude` CLI takes the prompt as a **positional argument** (not `--prompt` or stdin).
-Keep `WebSearch` and `WebFetch` allowed so the agent can research online. Ignore the
-stderr banner: `connectors are disabled`.
+Uses the same `cursor-agent` CLI as Gemini but with `--model glm-5.2-high`. Do **not**
+pass `--mode ask` — GLM refuses to rate without web search in ask mode. With `--trust`
+alone, web search may still be rejected but the model will rate from knowledge.
 
 ### Codex (read-only deliberation)
 
@@ -260,8 +256,8 @@ Total concurrent panel sessions = `3 × <number of pending games>`. Aim for that
 
 | Agent | Mode | Key flags | Web search |
 |-------|------|-----------|------------|
-| Gemini | deliberation | `--mode ask --trust` (never `--force` / `--yolo`) | Built-in; prompt must instruct agent to search |
-| GLM | deliberation | `--disallowed-tools Edit Write NotebookEdit Bash`; `--allowed-tools WebSearch WebFetch` | Explicitly allow `WebSearch` / `WebFetch` |
+| Gemini | deliberation | `--model gemini-3.5-flash --mode ask --trust` (never `--force` / `--yolo`) | Built-in; prompt must instruct agent to search |
+| GLM | deliberation | `--model glm-5.2-high --trust` (no `--mode ask`; never `--force` / `--yolo`) | May be rejected; prompt instructs agent to search |
 | Codex | deliberation | `--search exec` and `--ephemeral -s read-only` | Enabled via `--search` flag |
 
 Follow-up on the same Codex session (not needed for rating, but available):
