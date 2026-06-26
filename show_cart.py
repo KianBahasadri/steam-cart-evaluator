@@ -191,33 +191,39 @@ def generate_pdf(
     YELLOW_RGB   = (200, 180, 0)
     GREEN_RGB    = (40, 167, 69)
 
-    # Cell color logic for individual columns
-    def get_cell_style(col_idx: int, game: dict) -> tuple[int, int, int] | None:
-        """Return RGB override color or None for default."""
+    # Pastel background tints for status indicators (text stays dark for legibility)
+    BG_GREEN  = (209, 236, 216)
+    BG_YELLOW = (255, 242, 204)
+    BG_ORANGE = (255, 228, 196)
+    BG_RED    = (255, 213, 213)
+
+    # Cell style logic returns background fill color or None
+    def get_cell_bg(col_idx: int, game: dict) -> tuple[int, int, int] | None:
+        """Return RGB background fill or None."""
         if col_idx == 5:  # ProtonDB
             tier = game.get("protondb_tier")
             if tier and tier not in ("gold", "platinum"):
-                return RED_RGB
+                return BG_RED
         elif col_idx == 3:  # Discount
             discount = game.get("discount_percentage")
             if discount is not None:
                 if discount < 60:
-                    return RED_RGB
+                    return BG_RED
                 elif discount < 80:
-                    return ORANGE_RGB
+                    return BG_ORANGE
         elif col_idx == 7:  # AI Fun
             fun = game.get("ai_fun_rating")
             if fun is not None:
                 if fun < 0.65:
-                    return RED_RGB
+                    return BG_RED
                 elif fun < 0.80:
-                    return YELLOW_RGB
+                    return BG_YELLOW
         elif col_idx == 2:  # Hist. Low
             hist = game.get("price_history")
             if hist == "new_low":
-                return GREEN_RGB
+                return BG_GREEN
             elif hist == "matches_low":
-                return YELLOW_RGB
+                return BG_YELLOW
         return None
 
     font_dir = "/usr/share/fonts/TTF"
@@ -323,11 +329,13 @@ def generate_pdf(
             game = row_data["game"]
             for col_i, cell in enumerate(row_data["cells"]):
                 pdf.set_xy(x, y)
-                style = get_cell_style(col_i, game)
-                if style:
-                    pdf.set_text_color(*style)
-                else:
-                    pdf.set_text_color(*TEXT_DARK)
+                bg_style = get_cell_bg(col_i, game)
+                # Draw pastel background if this cell has a status indicator
+                if bg_style:
+                    pdf.set_fill_color(*bg_style)
+                    pdf.rect(x, y, COL_W[col_i], ROW_H, style="F")
+                # Text is always dark for legibility
+                pdf.set_text_color(*TEXT_DARK)
                 # Left-align the Game column, center everything else
                 align = "L" if col_i == 0 else "C"
                 padding = 2 if col_i == 0 else 0
