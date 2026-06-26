@@ -99,15 +99,16 @@ timeout 120 cursor-agent --print --output-format text --model gemini-3.5-flash \
 ### GLM 5.2 (Pioneer claude, read-only)
 
 ```
-PROMPT="$(cat /tmp/fun-rating-${SLUG}-prompt.md)"
-echo "$PROMPT" | timeout 120 env -u ANTHROPIC_AUTH_TOKEN -u CLAUDE_CODE_OAUTH_TOKEN \
+timeout 120 env -u ANTHROPIC_AUTH_TOKEN -u CLAUDE_CODE_OAUTH_TOKEN \
   ANTHROPIC_API_KEY="$PIONEER_API_KEY" ANTHROPIC_BASE_URL="https://api.pioneer.ai" \
   claude -p --model zai-org/GLM-5.2 \
   --disallowed-tools Edit Write NotebookEdit Bash \
   --allowed-tools WebSearch WebFetch \
+  "$(cat /tmp/fun-rating-${SLUG}-prompt.md)" \
   > /tmp/fun-rating-${SLUG}-glm.md 2>/tmp/fun-rating-${SLUG}-glm.err
 ```
 
+The `claude` CLI takes the prompt as a **positional argument** (not `--prompt` or stdin).
 Keep `WebSearch` and `WebFetch` allowed so the agent can research online. Ignore the
 stderr banner: `connectors are disabled`.
 
