@@ -3,3 +3,8 @@ __pycache__/
 *.pyc
 .venv/
 .qwen/
+
+# SteamDB wishlist dumps
+Your wishlist*.html
+Your wishlist*_files/
+steamdb_network_grab

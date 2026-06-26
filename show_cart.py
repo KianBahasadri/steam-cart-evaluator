@@ -71,6 +71,19 @@ def format_review(review: str | None) -> str:
     return REVIEW_SHORT.get(review, review)
 
 
+HIST_LOW_LABELS = {
+    "new_low": "NEW LOW",
+    "matches_low": "MATCHES",
+    "above_low": "NOT LOW",
+}
+
+
+def format_hist_low(value: str | None) -> str:
+    if not value:
+        return "—"
+    return HIST_LOW_LABELS.get(value, value)
+
+
 def format_fun_rating(rating: float | None) -> str:
     if rating is None:
         return "—"
@@ -121,43 +134,55 @@ def print_price_bar(
     if sum(c[1] for c in counts) == 0:
         return
 
+    total_qty = sum(c[1] for c in counts)
+    total_price = sum(c[2] for c in counts)
+
     # Bar weighted by quantity
+    print("by quantity")
     qty_segs = _bar_segments(counts, [c[1] for c in counts], bar_width)
     by_qty: list[str] = []
     for (_, _, _, color), w in zip(counts, qty_segs):
         if w > 0:
             by_qty.append(f"{color}{'█' * w}{RESET}")
-    print("".join(by_qty) + "  by quantity")
+    print("".join(by_qty))
+    qty_legend = "  ".join(
+        f"{color}{label}: {n/total_qty*100:.0f}% ({n}){RESET}"
+        for (label, n, s, color) in counts if n > 0
+    )
+    print(qty_legend)
+    print()
 
     # Bar weighted by price sum
+    print("by price")
     price_segs = _bar_segments(counts, [c[2] for c in counts], bar_width)
     by_price: list[str] = []
     for (_, _, _, color), w in zip(counts, price_segs):
         if w > 0:
             by_price.append(f"{color}{'█' * w}{RESET}")
-    print("".join(by_price) + "  by price")
-
-    legend = "  ".join(
-        f"{color}{label} ({n}, {format_price(s, currency)}){RESET}"
+    print("".join(by_price))
+    price_legend = "  ".join(
+        f"{color}{label}: {s/total_price*100:.1f}% ({format_price(s, currency)}){RESET}"
         for (label, n, s, color) in counts if n > 0
     )
-    print(legend)
+    print(price_legend)
 
 
 def print_table(games: list[dict], currency: str) -> None:
     pkey = price_key_for_game(games[0]) if games else f"price_{currency}"
     sorted_games = sorted(games, key=lambda g: g.get(pkey, 0) or 0)
 
-    rows: list[tuple[str, str, str, str, str, str, str, int | None, float | None]] = []
+    rows: list[tuple] = []
     for game in sorted_games:
         price = game.get(pkey, 0) or 0
         discount = game.get("discount_percentage")
         discount_str = f"-{discount}%" if discount is not None else "—"
         linux = game.get("linux_native")
+        hist_raw = game.get("price_history")
         rows.append(
             (
                 game.get("name", "(unknown)"),
                 format_price(price, currency),
+                format_hist_low(hist_raw),
                 discount_str,
                 format_linux(linux),
                 format_proton(game.get("protondb_tier"), linux),
@@ -165,21 +190,23 @@ def print_table(games: list[dict], currency: str) -> None:
                 format_fun_rating(game.get("ai_fun_rating")),
                 discount,
                 game.get("ai_fun_rating"),
+                hist_raw,
             )
         )
 
-    visible_cols = 7
-    headers = ("Game", "Price", "Discount", "Linux", "ProtonDB", "Rating", "AI Fun", None)
+    visible_cols = 8
+    headers = ("Game", "Price", "Hist. Low", "Discount", "Linux", "ProtonDB", "Rating", "AI Fun", None)
     widths = [len(str(h)) if h else 0 for h in headers]
-    for name, price, discount, linux, proton, review, fun, _, _ in rows:
+    for name, price, hist, discount, linux, proton, review, fun, *_ in rows:
         widths[0] = max(widths[0], len(name))
         widths[1] = max(widths[1], len(price))
-        widths[2] = max(widths[2], len(discount))
-        widths[3] = max(widths[3], len(linux))
-        widths[4] = max(widths[4], len(proton))
-        widths[5] = max(widths[5], len(review))
-        widths[6] = max(widths[6], len(fun))
-    widths[7] = 0  # hidden columns (discount raw + fun raw)
+        widths[2] = max(widths[2], len(hist))
+        widths[3] = max(widths[3], len(discount))
+        widths[4] = max(widths[4], len(linux))
+        widths[5] = max(widths[5], len(proton))
+        widths[6] = max(widths[6], len(review))
+        widths[7] = max(widths[7], len(fun))
+    widths[8] = 0  # hidden columns (discount raw + fun raw + hist raw)
 
     def line(char: str = "─") -> str:
         parts = [char * (w + 2) for w in widths[:visible_cols]]
@@ -188,25 +215,33 @@ def print_table(games: list[dict], currency: str) -> None:
     def row(cells: tuple) -> str:
         parts = [f" {cells[i]:<{widths[i]}} " for i in range(visible_cols)]
         # Color ProtonDB tier red if not gold/platinum
-        tier = cells[4]
+        tier = cells[5]
         if tier and tier not in ("gold", "platinum", "ProtonDB"):
-            parts[4] = f" {RED}{tier:<{widths[4]}}{RESET} "
+            parts[5] = f" {RED}{tier:<{widths[5]}}{RESET} "
         # Color discount yellow if <80%, red if <60%
-        discount_str = cells[2]
-        raw_discount = cells[7] if len(cells) > 7 else None
+        discount_str = cells[3]
+        raw_discount = cells[8] if len(cells) > 8 else None
         if raw_discount is not None and discount_str != "Discount":
             if raw_discount < 60:
-                parts[2] = f" {RED}{discount_str:<{widths[2]}}{RESET} "
+                parts[3] = f" {RED}{discount_str:<{widths[3]}}{RESET} "
             elif raw_discount < 80:
-                parts[2] = f" {YELLOW}{discount_str:<{widths[2]}}{RESET} "
+                parts[3] = f" {YELLOW}{discount_str:<{widths[3]}}{RESET} "
         # Color AI fun rating: red <0.65, yellow 0.65-0.79, no color >=0.80
-        fun_str = cells[6]
-        raw_fun = cells[8] if len(cells) > 8 else None
+        fun_str = cells[7]
+        raw_fun = cells[9] if len(cells) > 9 else None
         if raw_fun is not None and fun_str != "AI Fun" and fun_str != "—":
             if raw_fun < 0.65:
-                parts[6] = f" {RED}{fun_str:<{widths[6]}}{RESET} "
+                parts[7] = f" {RED}{fun_str:<{widths[7]}}{RESET} "
             elif raw_fun < 0.80:
-                parts[6] = f" {YELLOW}{fun_str:<{widths[6]}}{RESET} "
+                parts[7] = f" {YELLOW}{fun_str:<{widths[7]}}{RESET} "
+        # Color historical low: green=new low, yellow=matches, dim otherwise
+        hist_str = cells[2]
+        raw_hist = cells[10] if len(cells) > 10 else None
+        if raw_hist and hist_str not in ("Hist. Low",):
+            if raw_hist == "new_low":
+                parts[2] = f" {GREEN}{hist_str:<{widths[2]}}{RESET} "
+            elif raw_hist == "matches_low":
+                parts[2] = f" {YELLOW}{hist_str:<{widths[2]}}{RESET} "
         return "│" + "│".join(parts) + "│"
 
     top = "┌" + "┬".join("─" * (w + 2) for w in widths[:visible_cols]) + "┐"
