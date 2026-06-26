@@ -61,11 +61,11 @@ def price_key_for_game(game: dict) -> str | None:
     return None
 
 
-def load_games(path: Path) -> tuple[str, list[dict]]:
+def load_games(path: Path) -> tuple[str, list[dict], dict]:
     data = json.loads(path.read_text())
     currency = (data.get("currency") or "cad").lower()
     games = data.get("games", [])
-    return currency, games
+    return currency, games, data
 
 
 def format_price(amount: float, currency: str) -> str:
@@ -347,7 +347,7 @@ def main(stdscr) -> None:
         stdscr.getch()
         return
 
-    currency, games = load_games(path)
+    currency, games, data = load_games(path)
     if not games:
         stdscr.addstr(0, 0, "No games in file.")
         stdscr.refresh()
@@ -357,9 +357,16 @@ def main(stdscr) -> None:
     pkey = price_key_for_game(games[0])
     sorted_games = sorted(games, key=lambda g: g.get(pkey, 0) or 0)
 
-    selected = [True] * len(sorted_games)
+    # Initialize selection from the persisted "dropped" field
+    selected = [not g.get("dropped", False) for g in sorted_games]
     current_row = 0
     scroll_offset = 0
+
+    def save_selection() -> None:
+        for g, sel in zip(sorted_games, selected):
+            g["dropped"] = not sel
+        data["games"] = games
+        path.write_text(json.dumps(data, indent=2, ensure_ascii=False))
 
     while True:
         stdscr.clear()
@@ -462,6 +469,7 @@ def main(stdscr) -> None:
             current_row = min(len(sorted_games) - 1, current_row + 1)
         elif key == ord(" ") or key == 10:  # space or enter
             selected[current_row] = not selected[current_row]
+            save_selection()
 
 
 if __name__ == "__main__":

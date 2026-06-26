@@ -17,7 +17,8 @@
         "codex": 0.94
       },
       "ai_fun_rating_at": "2026-06-26T02:32:56Z",
-      "price_history": "matches_low"
+      "price_history": "matches_low",
+      "dropped": false
     },
     {
       "name": "Getting Over It with Bennett Foddy",
@@ -34,7 +35,8 @@
         "glm": 0.72
       },
       "ai_fun_rating_at": "2026-06-26T03:07:40.529390+00:00",
-      "price_history": "matches_low"
+      "price_history": "matches_low",
+      "dropped": false
     },
     {
       "name": "Paperwork",
@@ -51,7 +53,8 @@
         "glm": 0.5
       },
       "ai_fun_rating_at": "2026-06-26T03:07:40.529390+00:00",
-      "price_history": "new_low"
+      "price_history": "new_low",
+      "dropped": false
     },
     {
       "name": "HITMAN World of Assassination",
@@ -68,7 +71,8 @@
         "glm": 0.92
       },
       "ai_fun_rating_at": "2026-06-26T03:07:40.529390+00:00",
-      "price_history": "above_low"
+      "price_history": "above_low",
+      "dropped": false
     },
     {
       "name": "Firewatch",
@@ -85,7 +89,8 @@
         "codex": 0.74
       },
       "ai_fun_rating_at": "2026-06-26T02:32:56Z",
-      "price_history": "above_low"
+      "price_history": "above_low",
+      "dropped": false
     },
     {
       "name": "The Entropy Centre",
@@ -102,7 +107,8 @@
         "codex": 0.81
       },
       "ai_fun_rating_at": "2026-06-26T02:32:56Z",
-      "price_history": "matches_low"
+      "price_history": "matches_low",
+      "dropped": false
     },
     {
       "name": "Red Dead Redemption 2",
@@ -119,7 +125,8 @@
         "glm": 0.92
       },
       "ai_fun_rating_at": "2026-06-26T03:07:40.529390+00:00",
-      "price_history": "matches_low"
+      "price_history": "matches_low",
+      "dropped": false
     },
     {
       "name": "XCOM® 2",
@@ -136,7 +143,8 @@
         "glm": 0.88
       },
       "ai_fun_rating_at": "2026-06-26T03:07:40.529390+00:00",
-      "price_history": "above_low"
+      "price_history": "above_low",
+      "dropped": false
     },
     {
       "name": "Project Zomboid",
@@ -152,7 +160,8 @@
         "glm": 0.85
       },
       "ai_fun_rating_at": "2026-06-26T03:08:39.058913+00:00",
-      "price_history": "above_low"
+      "price_history": "above_low",
+      "dropped": false
     },
     {
       "name": "Kenshi",
@@ -169,7 +178,8 @@
         "glm": 0.88
       },
       "ai_fun_rating_at": "2026-06-26T03:07:40.529390+00:00",
-      "price_history": "above_low"
+      "price_history": "above_low",
+      "dropped": false
     },
     {
       "name": "The Binding of Isaac: Rebirth",
@@ -186,7 +196,8 @@
         "glm": 0.95
       },
       "ai_fun_rating_at": "2026-06-26T03:07:40.529390+00:00",
-      "price_history": "new_low"
+      "price_history": "new_low",
+      "dropped": false
     },
     {
       "name": "QUICKERFLAK",
@@ -203,7 +214,8 @@
         "glm": 0.78
       },
       "ai_fun_rating_at": "2026-06-26T03:07:40.529390+00:00",
-      "price_history": "above_low"
+      "price_history": "above_low",
+      "dropped": false
     },
     {
       "name": "Barro 22",
@@ -219,7 +231,8 @@
         "glm": 0.45
       },
       "ai_fun_rating_at": "2026-06-26T03:07:40.529390+00:00",
-      "price_history": "above_low"
+      "price_history": "above_low",
+      "dropped": false
     },
     {
       "name": "Hentai Killer",
@@ -236,7 +249,8 @@
         "glm": 0.5
       },
       "ai_fun_rating_at": "2026-06-26T03:07:40.529390+00:00",
-      "price_history": "above_low"
+      "price_history": "above_low",
+      "dropped": false
     },
     {
       "name": "SOS OPS!",
@@ -252,7 +266,8 @@
         "glm": 0.72
       },
       "ai_fun_rating_at": "2026-06-26T03:08:39.058913+00:00",
-      "price_history": "matches_low"
+      "price_history": "matches_low",
+      "dropped": false
     },
     {
       "name": "Lords of the Realm II",
@@ -269,7 +284,8 @@
         "glm": 0.78
       },
       "ai_fun_rating_at": "2026-06-26T03:07:40.529390+00:00",
-      "price_history": "above_low"
+      "price_history": "above_low",
+      "dropped": false
     },
     {
       "name": "CARRION",
@@ -286,7 +302,8 @@
         "codex": 0.82
       },
       "ai_fun_rating_at": "2026-06-26T02:40:00Z",
-      "price_history": "new_low"
+      "price_history": "new_low",
+      "dropped": false
     },
     {
       "name": "Hotline Miami",
@@ -303,7 +320,8 @@
         "glm": 0.9
       },
       "ai_fun_rating_at": "2026-06-26T03:07:40.529390+00:00",
-      "price_history": "new_low"
+      "price_history": "new_low",
+      "dropped": false
     },
     {
       "name": "Cruelty Squad",
@@ -320,7 +338,8 @@
         "glm": 0.85
       },
       "ai_fun_rating_at": "2026-06-26T03:07:40.529390+00:00",
-      "price_history": "new_low"
+      "price_history": "new_low",
+      "dropped": false
     },
     {
       "name": "Battlefield™ 1",
@@ -337,7 +356,8 @@
         "glm": 0.88
       },
       "ai_fun_rating_at": "2026-06-26T03:07:40.529390+00:00",
-      "price_history": "matches_low"
+      "price_history": "matches_low",
+      "dropped": false
     },
     {
       "name": "Kerbal Space Program",
@@ -354,7 +374,8 @@
         "codex": 0.94
       },
       "ai_fun_rating_at": "2026-06-26T02:40:00Z",
-      "price_history": "above_low"
+      "price_history": "above_low",
+      "dropped": false
     },
     {
       "name": "Hollow Knight",
@@ -371,7 +392,8 @@
         "codex": 0.94
       },
       "ai_fun_rating_at": "2026-06-26T02:40:00Z",
-      "price_history": "above_low"
+      "price_history": "above_low",
+      "dropped": false
     },
     {
       "name": "Shadow of the Tomb Raider: Definitive Edition",
@@ -388,7 +410,8 @@
         "glm": 0.78
       },
       "ai_fun_rating_at": "2026-06-26T03:07:40.529390+00:00",
-      "price_history": "above_low"
+      "price_history": "above_low",
+      "dropped": false
     },
     {
       "name": "Save the Reactor",
@@ -404,7 +427,8 @@
         "glm": 0.72
       },
       "ai_fun_rating_at": "2026-06-26T03:07:40.529390+00:00",
-      "price_history": "new_low"
+      "price_history": "new_low",
+      "dropped": false
     },
     {
       "name": "The Surge 2",
@@ -421,7 +445,8 @@
         "codex": 0.77
       },
       "ai_fun_rating_at": "2026-06-26T02:40:00Z",
-      "price_history": "matches_low"
+      "price_history": "matches_low",
+      "dropped": false
     },
     {
       "name": "Noita",
@@ -438,7 +463,8 @@
         "glm": 0.92
       },
       "ai_fun_rating_at": "2026-06-26T03:07:40.529390+00:00",
-      "price_history": "matches_low"
+      "price_history": "matches_low",
+      "dropped": false
     },
     {
       "name": "Outward Definitive Edition",
@@ -455,7 +481,8 @@
         "glm": 0.68
       },
       "ai_fun_rating_at": "2026-06-26T03:07:40.529390+00:00",
-      "price_history": "above_low"
+      "price_history": "above_low",
+      "dropped": false
     },
     {
       "name": "Besiege",
@@ -472,7 +499,8 @@
         "glm": 0.78
       },
       "ai_fun_rating_at": "2026-06-26T03:07:40.529390+00:00",
-      "price_history": "matches_low"
+      "price_history": "matches_low",
+      "dropped": false
     },
     {
       "name": "Frostpunk x The Invincible",
@@ -489,7 +517,8 @@
         "codex": 0.72
       },
       "ai_fun_rating_at": "2026-06-26T02:40:00Z",
-      "price_history": "new_low"
+      "price_history": "new_low",
+      "dropped": false
     },
     {
       "name": "Planet Zoo",
@@ -506,7 +535,8 @@
         "glm": 0.85
       },
       "ai_fun_rating_at": "2026-06-26T03:07:40.529390+00:00",
-      "price_history": "new_low"
+      "price_history": "new_low",
+      "dropped": false
     },
     {
       "name": "Dishonored",
@@ -523,7 +553,8 @@
         "codex": 0.92
       },
       "ai_fun_rating_at": "2026-06-26T03:25:32.185494+00:00",
-      "price_history": "new_low"
+      "price_history": "new_low",
+      "dropped": false
     },
     {
       "name": "Before Your Eyes",
@@ -540,7 +571,8 @@
         "codex": 0.82
       },
       "ai_fun_rating_at": "2026-06-26T03:25:32.185494+00:00",
-      "price_history": "matches_low"
+      "price_history": "matches_low",
+      "dropped": false
     },
     {
       "name": "Don't Starve Together",
@@ -557,7 +589,8 @@
         "codex": 0.9
       },
       "ai_fun_rating_at": "2026-06-26T03:25:32.185494+00:00",
-      "price_history": "matches_low"
+      "price_history": "matches_low",
+      "dropped": false
     },
     {
       "name": "Dying Light",
@@ -574,7 +607,8 @@
         "codex": 0.88
       },
       "ai_fun_rating_at": "2026-06-26T03:25:32.185494+00:00",
-      "price_history": "matches_low"
+      "price_history": "matches_low",
+      "dropped": false
     },
     {
       "name": "Stronghold Crusader HD (2012)",
@@ -591,7 +625,8 @@
         "codex": 0.88
       },
       "ai_fun_rating_at": "2026-06-26T03:25:32.185494+00:00",
-      "price_history": "matches_low"
+      "price_history": "matches_low",
+      "dropped": false
     },
     {
       "name": "Buckshot Roulette",
@@ -608,7 +643,8 @@
         "codex": 0.88
       },
       "ai_fun_rating_at": "2026-06-26T03:25:32.185494+00:00",
-      "price_history": "new_low"
+      "price_history": "new_low",
+      "dropped": false
     },
     {
       "name": "Tom Clancy's Splinter Cell Chaos Theory®",
@@ -625,7 +661,8 @@
         "codex": 0.92
       },
       "ai_fun_rating_at": "2026-06-26T03:28:41.039208+00:00",
-      "price_history": "matches_low"
+      "price_history": "matches_low",
+      "dropped": false
     },
     {
       "name": "Far Cry® 4",
@@ -642,7 +679,8 @@
         "codex": 0.84
       },
       "ai_fun_rating_at": "2026-06-26T03:25:32.185494+00:00",
-      "price_history": "new_low"
+      "price_history": "new_low",
+      "dropped": false
     },
     {
       "name": "Poly Bridge 2",
@@ -658,7 +696,8 @@
         "codex": 0.86
       },
       "ai_fun_rating_at": "2026-06-26T03:25:32.185494+00:00",
-      "price_history": "matches_low"
+      "price_history": "matches_low",
+      "dropped": false
     },
     {
       "name": "Dead Space",
@@ -675,7 +714,8 @@
         "codex": 0.88
       },
       "ai_fun_rating_at": "2026-06-26T03:25:32.185494+00:00",
-      "price_history": "new_low"
+      "price_history": "new_low",
+      "dropped": false
     },
     {
       "name": "Mass Effect™ Legendary Edition",
@@ -691,7 +731,8 @@
         "codex": 0.92
       },
       "ai_fun_rating_at": "2026-06-26T03:25:32.185494+00:00",
-      "price_history": "matches_low"
+      "price_history": "matches_low",
+      "dropped": false
     },
     {
       "name": "Dragon Age™ Inquisition",
@@ -707,7 +748,8 @@
         "codex": 0.82
       },
       "ai_fun_rating_at": "2026-06-26T03:25:32.185494+00:00",
-      "price_history": "matches_low"
+      "price_history": "matches_low",
+      "dropped": false
     },
     {
       "name": "Idols of Ash",
@@ -724,7 +766,8 @@
         "codex": 0.9
       },
       "ai_fun_rating_at": "2026-06-26T03:25:32.185494+00:00",
-      "price_history": "matches_low"
+      "price_history": "matches_low",
+      "dropped": false
     },
     {
       "name": "Injustice™ 2",
@@ -741,7 +784,8 @@
         "codex": 0.86
       },
       "ai_fun_rating_at": "2026-06-26T03:25:32.185494+00:00",
-      "price_history": "matches_low"
+      "price_history": "matches_low",
+      "dropped": false
     },
     {
       "name": "Sifu",
@@ -758,7 +802,8 @@
         "codex": 0.86
       },
       "ai_fun_rating_at": "2026-06-26T03:25:32.185494+00:00",
-      "price_history": "matches_low"
+      "price_history": "matches_low",
+      "dropped": false
     },
     {
       "name": "Bendy and the Dark Revival",
@@ -775,7 +820,8 @@
         "codex": 0.78
       },
       "ai_fun_rating_at": "2026-06-26T04:22:23.027815+00:00",
-      "price_history": "new_low"
+      "price_history": "new_low",
+      "dropped": false
     }
   ]
 }
