@@ -481,38 +481,70 @@ def generate_pdf(
         pdf.set_text_color(*TEXT_DARK)
         pdf.ln(3)
 
-        # ── Color coding swatches ─────────────────────────────────────────────
+        # ── Color coding by column ──────────────────────────────────────────────
         pdf.set_font("DejaVu", "B", 8)
         pdf.set_x(margin_left)
-        pdf.cell(TOTAL_W, 5, "Color coding", new_x="LMARGIN", new_y="NEXT")
-        pdf.ln(1)
+        pdf.cell(TOTAL_W, 5, "Color coding by column", new_x="LMARGIN", new_y="NEXT")
+        pdf.ln(2)
 
-        swatches = [
-            (BG_GREEN,  "Light green",
-             "Current price is a historical new low."),
-            (BG_YELLOW, "Light yellow",
-             "Price matches a previous low, or AI fun rating is mid-range (0.65-0.79)."),
-            (BG_ORANGE, "Light orange",
-             "Moderate discount (60-79% off)."),
-            (BG_RED,    "Light red",
-             "Low discount (<60%), poor ProtonDB tier (below gold), or AI fun < 0.65."),
-        ]
-        swatch_size = 4
-        indent = margin_left + 0.5
-        for rgb, label, desc in swatches:
-            y = pdf.get_y() + 0.5
+        swatch_size = 3.5
+        indent = margin_left + 1
+
+        # Helper: draw one color legend row
+        def draw_swatch_row(rgb, label, desc):
+            y = pdf.get_y() + 0.3
             pdf.set_fill_color(*rgb)
             pdf.rect(indent, y, swatch_size, swatch_size, style="F")
             pdf.set_draw_color(*BORDER_LIGHT)
             pdf.rect(indent, y, swatch_size, swatch_size)
             pdf.set_xy(indent + swatch_size + 1.5, pdf.get_y())
-            pdf.set_font("DejaVu", "B", 7.5)
+            pdf.set_font("DejaVu", "B", 7)
             pdf.set_text_color(*TEXT_DARK)
-            pdf.cell(22, 5, label + ":")
-            pdf.set_font("DejaVu", "", 7.5)
-            pdf.cell(0, 5, desc, new_x="LMARGIN", new_y="NEXT")
-            pdf.ln(1)
+            pdf.cell(18, 4.5, label + ":")
+            pdf.set_font("DejaVu", "", 7)
+            pdf.cell(0, 4.5, desc, new_x="LMARGIN", new_y="NEXT")
 
+        # --- Historical Low column ---
+        pdf.set_font("DejaVu", "B", 7.5)
+        pdf.set_x(indent - 0.5)
+        pdf.cell(0, 5, "Hist. Low", new_x="LMARGIN", new_y="NEXT")
+        pdf.ln(0.5)
+        draw_swatch_row(BG_GREEN, "Green", "Current price is a historical new low")
+        draw_swatch_row(BG_YELLOW, "Yellow", "Price matches a previous all-time low")
+        pdf.ln(1.5)
+
+        # --- Discount column ---
+        pdf.set_font("DejaVu", "B", 7.5)
+        pdf.set_x(indent - 0.5)
+        pdf.cell(0, 5, "Discount", new_x="LMARGIN", new_y="NEXT")
+        pdf.ln(0.5)
+        draw_swatch_row(BG_RED, "Red", "Poor discount: less than 60% off")
+        draw_swatch_row(BG_ORANGE, "Orange", "Fair discount: 60-79% off")
+        pdf.ln(1.5)
+
+        # --- AI Fun column ---
+        pdf.set_font("DejaVu", "B", 7.5)
+        pdf.set_x(indent - 0.5)
+        pdf.cell(0, 5, "AI Fun", new_x="LMARGIN", new_y="NEXT")
+        pdf.ln(0.5)
+        draw_swatch_row(BG_RED, "Red", "Low fun rating: below 0.65")
+        draw_swatch_row(BG_YELLOW, "Yellow", "Mid-range: 0.65 to 0.79")
+        pdf.ln(1.5)
+
+        # --- ProtonDB column ---
+        pdf.set_font("DejaVu", "B", 7.5)
+        pdf.set_x(indent - 0.5)
+        pdf.cell(0, 5, "ProtonDB", new_x="LMARGIN", new_y="NEXT")
+        pdf.ln(0.5)
+        draw_swatch_row(BG_RED, "Red", "Below Gold: Silver, Bronze, or Borked tier")
+        pdf.ln(1.5)
+
+        pdf.set_font("DejaVu", "", 7)
+        pdf.set_text_color(*(130, 130, 130))
+        pdf.set_x(indent - 0.5)
+        pdf.cell(0, 4, "Unhighlighted cells met the default threshold (e.g., 80%+ discount, AI Fun >= 0.80, Gold/Platinum).",
+                 new_x="LMARGIN", new_y="NEXT")
+        pdf.set_text_color(*TEXT_DARK)
         pdf.ln(3)
 
         # ── Review rating shorthand ───────────────────────────────────────────
