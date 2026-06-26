@@ -41,16 +41,20 @@ def get_api_key() -> str:
 
 
 def rate_game(
-    name: str,
+    game: dict,
     api_key: str,
     analysis_models: list[str],
     judge_model: str,
 ) -> float | None:
+    name = game.get("name", "?")
+    review = game.get("review_score")
+    context = f"\nSteam review summary: {review}." if review else ""
     prompt = (
         f"You are a video game expert panel. Rate how fun the game "
         f"\"{name}\" is on a continuous scale from 0.0 (not fun at all) "
         f"to 1.0 (extremely fun). Consider gameplay depth, replayability, "
-        f"critical reception, and general community consensus.\n\n"
+        f"critical reception, and general community consensus."
+        f"{context}\n\n"
         f"Respond ONLY with a single number between 0.0 and 1.0, "
         f"no explanation."
     )
@@ -129,6 +133,11 @@ def main() -> int:
         default=DEFAULT_JUDGE_MODEL,
         help=f"Judge model (default: {DEFAULT_JUDGE_MODEL})",
     )
+    ap.add_argument(
+        "--force",
+        action="store_true",
+        help="Re-rate games that already have an ai_fun_rating",
+    )
     args = ap.parse_args()
 
     path = Path(args.input)
@@ -144,31 +153,43 @@ def main() -> int:
 
     api_key = get_api_key()
 
+    targets = games
     if args.game:
         needle = args.game.lower()
-        games = [g for g in games if needle in g.get("name", "").lower()]
-        if not games:
+        targets = [g for g in games if needle in g.get("name", "").lower()]
+        if not targets:
             print(f"No games matching {args.game!r}")
             return 1
 
+    if args.force:
+        pending = targets
+    else:
+        pending = [g for g in targets if g.get("ai_fun_rating") is None]
+    skipped = len(targets) - len(pending)
+
     print(
-        f"Rating {len(games)} game(s) with Fusion panel "
-        f"(judge: {args.judge})..."
+        f"Rating {len(pending)} game(s) with Fusion panel "
+        f"(judge: {args.judge})"
+        + (f", skipping {skipped} already rated" if skipped else "")
+        + "..."
     )
 
-    results: list[tuple[str, float | None]] = []
-    for game in games:
+    for game in pending:
         name = game.get("name", "?")
         print(f"  {name}...", end=" ", flush=True)
-        score = rate_game(name, api_key, args.models, args.judge)
+        score = rate_game(game, api_key, args.models, args.judge)
         print(f"{score}" if score is not None else "N/A")
-        results.append((name, score))
+        if score is not None:
+            game["ai_fun_rating"] = score
+            # Persist after each game so partial progress survives a crash.
+            path.write_text(json.dumps(data, indent=2) + "\n")
         time.sleep(0.5)
 
     print("\nFun scores:")
-    for name, score in sorted(results, key=lambda x: -(x[1] or -1)):
+    for game in sorted(targets, key=lambda g: -(g.get("ai_fun_rating") or -1)):
+        score = game.get("ai_fun_rating")
         s = f"{score:.2f}" if score is not None else "N/A"
-        print(f"  {s:>5}  {name}")
+        print(f"  {s:>5}  {game.get('name', '?')}")
 
     return 0
 
