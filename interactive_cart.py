@@ -40,6 +40,7 @@ CP_YELLOW = 2
 CP_RED = 3
 CP_BLUE = 4
 CP_ORANGE = 5
+CP_DIM = 6
 
 # Price brackets: (label, lo, hi, color_pair)
 PRICE_BRACKETS = [
@@ -52,6 +53,7 @@ PRICE_BRACKETS = [
 
 VISIBLE_COLS = 8
 HEADERS = ("Game", "Price", "Hist. Low", "Discount", "Linux", "ProtonDB", "Rating", "AI Fun")
+GUTTER = 2  # left gutter reserved for selection arrow
 
 
 def price_key_for_game(game: dict) -> str | None:
@@ -134,8 +136,10 @@ def setup_colors() -> None:
     if curses.can_change_color():
         curses.init_color(8, 1000, 500, 0)  # orange
         curses.init_pair(CP_ORANGE, 8, -1)
+        curses.init_pair(CP_DIM, 240, -1)
     else:
         curses.init_pair(CP_ORANGE, curses.COLOR_MAGENTA, -1)
+        curses.init_pair(CP_DIM, curses.COLOR_BLACK, -1)
 
 
 def build_row_cells(game: dict, pkey: str, currency: str) -> list[str]:
@@ -161,8 +165,9 @@ def calc_widths(games: list[dict], pkey: str, currency: str, max_x: int) -> list
         for i in range(VISIBLE_COLS):
             widths[i] = max(widths[i], len(cells[i]))
     total = 1 + sum(w + 3 for w in widths[:VISIBLE_COLS])
-    if total > max_x:
-        overflow = total - max_x
+    avail = max_x - GUTTER
+    if total > avail:
+        overflow = total - avail
         widths[0] = max(10, widths[0] - overflow)
     return widths
 
@@ -217,13 +222,13 @@ def draw_border(
     stdscr, y: int, widths: list[int], left: str, mid: str, right: str, max_x: int
 ) -> None:
     parts = ["─" * (w + 2) for w in widths[:VISIBLE_COLS]]
-    line = left + mid.join(parts) + right
+    line = " " * GUTTER + left + mid.join(parts) + right
     safe_addstr(stdscr, y, 0, line, 0, max_x)
 
 
 def draw_header(stdscr, y: int, widths: list[int], max_x: int) -> None:
     parts = [f" {HEADERS[i]:<{widths[i]}} " for i in range(VISIBLE_COLS)]
-    line = "│" + "│".join(parts) + "│"
+    line = " " * GUTTER + "│" + "│".join(parts) + "│"
     safe_addstr(stdscr, y, 0, line, 0, max_x)
 
 
@@ -238,19 +243,27 @@ def draw_data_row(
     max_x: int,
 ) -> None:
     if not selected:
-        base_attr = curses.A_DIM
+        base_attr = curses.A_DIM | curses.color_pair(CP_DIM)
     elif is_current:
         base_attr = curses.A_BOLD
     else:
         base_attr = 0
 
-    x = 0
+    if is_current:
+        safe_addstr(stdscr, y, 0, "> ", curses.A_BOLD, max_x)
+    else:
+        safe_addstr(stdscr, y, 0, "  ", 0, max_x)
+
+    x = GUTTER
     x = safe_addstr(stdscr, y, x, "│", base_attr, max_x)
 
     for i in range(VISIBLE_COLS):
         w = widths[i]
         content = f" {cells[i]:<{w}} "
-        c_color = cell_color(i, game, selected)
+        if not selected:
+            c_color = 0
+        else:
+            c_color = cell_color(i, game, selected)
         x = safe_addstr(stdscr, y, x, content, c_color | base_attr, max_x)
         x = safe_addstr(stdscr, y, x, "│", base_attr, max_x)
 

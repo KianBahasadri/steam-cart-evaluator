@@ -90,7 +90,7 @@
       },
       "ai_fun_rating_at": "2026-06-26T02:32:56Z",
       "price_history": "above_low",
-      "dropped": false
+      "dropped": true
     },
     {
       "name": "The Entropy Centre",
@@ -144,7 +144,7 @@
       },
       "ai_fun_rating_at": "2026-06-26T03:07:40.529390+00:00",
       "price_history": "above_low",
-      "dropped": false
+      "dropped": true
     },
     {
       "name": "Project Zomboid",
@@ -375,7 +375,7 @@
       },
       "ai_fun_rating_at": "2026-06-26T02:40:00Z",
       "price_history": "above_low",
-      "dropped": false
+      "dropped": true
     },
     {
       "name": "Hollow Knight",
@@ -464,7 +464,7 @@
       },
       "ai_fun_rating_at": "2026-06-26T03:07:40.529390+00:00",
       "price_history": "matches_low",
-      "dropped": false
+      "dropped": true
     },
     {
       "name": "Outward Definitive Edition",
@@ -803,7 +803,7 @@
       },
       "ai_fun_rating_at": "2026-06-26T03:25:32.185494+00:00",
       "price_history": "matches_low",
-      "dropped": false
+      "dropped": true
     },
     {
       "name": "Bendy and the Dark Revival",
