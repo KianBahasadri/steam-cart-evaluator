@@ -10,6 +10,9 @@ from pathlib import Path
 
 YELLOW = "\033[33m"
 RED = "\033[31m"
+ORANGE = "\033[38;5;208m"
+BLUE = "\033[34m"
+GREEN = "\033[32m"
 RESET = "\033[0m"
 
 CURRENCY_SYMBOLS = {
@@ -72,6 +75,73 @@ def format_fun_rating(rating: float | None) -> str:
     if rating is None:
         return "—"
     return f"{rating:.2f}"
+
+
+PRICE_BRACKETS = [
+    ("<$2", 0.0, 2.0, GREEN),
+    ("$2–3", 2.0, 3.0, BLUE),
+    ("$3–5", 3.0, 5.0, YELLOW),
+    ("$5–10", 5.0, 10.0, ORANGE),
+    ("≥$10", 10.0, float("inf"), RED),
+]
+
+
+def _bar_segments(
+    counts: list[tuple[str, int, float, str]], weights: list[float], bar_width: int
+) -> list[int]:
+    """Largest-remainder allocation so segments sum exactly to bar_width."""
+    total = sum(weights)
+    if total == 0:
+        return [bar_width // len(weights)] * len(weights)
+    raw = [w / total * bar_width for w in weights]
+    floors = [int(r) for r in raw]
+    remainders = [r - f for r, f in zip(raw, floors)]
+    leftover = bar_width - sum(floors)
+    for i in sorted(range(len(counts)), key=lambda j: -remainders[j]):
+        if leftover <= 0:
+            break
+        floors[i] += 1
+        leftover -= 1
+    return floors
+
+
+def print_price_bar(
+    games: list[dict], pkey: str, currency: str, visible_cols: int, widths: list[int]
+) -> None:
+    """Print two coloured bars: one weighted by quantity, one by price sum."""
+    bar_width = sum(w + 2 for w in widths[:visible_cols]) + visible_cols + 1
+
+    counts: list[tuple[str, int, float, str]] = []
+    for label, lo, hi, color in PRICE_BRACKETS:
+        bracket_games = [g for g in games if lo <= (g.get(pkey, 0) or 0) < hi]
+        n = len(bracket_games)
+        bracket_sum = sum((g.get(pkey, 0) or 0) for g in bracket_games)
+        counts.append((label, n, bracket_sum, color))
+
+    if sum(c[1] for c in counts) == 0:
+        return
+
+    # Bar weighted by quantity
+    qty_segs = _bar_segments(counts, [c[1] for c in counts], bar_width)
+    by_qty: list[str] = []
+    for (_, _, _, color), w in zip(counts, qty_segs):
+        if w > 0:
+            by_qty.append(f"{color}{'█' * w}{RESET}")
+    print("".join(by_qty) + "  by quantity")
+
+    # Bar weighted by price sum
+    price_segs = _bar_segments(counts, [c[2] for c in counts], bar_width)
+    by_price: list[str] = []
+    for (_, _, _, color), w in zip(counts, price_segs):
+        if w > 0:
+            by_price.append(f"{color}{'█' * w}{RESET}")
+    print("".join(by_price) + "  by price")
+
+    legend = "  ".join(
+        f"{color}{label} ({n}, {format_price(s, currency)}){RESET}"
+        for (label, n, s, color) in counts if n > 0
+    )
+    print(legend)
 
 
 def print_table(games: list[dict], currency: str) -> None:
@@ -146,6 +216,9 @@ def print_table(games: list[dict], currency: str) -> None:
     for r in rows:
         print(row(r))
     print(line("─").replace("├", "└").replace("┼", "┴").replace("┤", "┘"))
+
+    print()
+    print_price_bar(sorted_games, pkey, currency, visible_cols, widths)
 
     total = sum(g.get(pkey, 0) or 0 for g in sorted_games)
     linux_count = sum(1 for g in sorted_games if g.get("linux_native") is True)
